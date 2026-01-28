@@ -22,50 +22,23 @@ export const useTabManager = (): TabManager => {
   }, []);
 
   const closeTab = useCallback((id: string) => {
-    setTabs(prev => {
-      if (prev.length === 1) return prev; // Don't close last tab
+    if (tabs.length <= 1 && tabs[0].id === id) return;
 
-      const newTabs = prev.filter(t => t.id !== id);
+    const index = tabs.findIndex(t => t.id === id);
+    if (index === -1) return;
 
-      // If closing active tab, activate the last one
-      if (id === activeTabId) {
-        // We need to use the calculated newTabs to determine the next active tab
-        // However, activeTabId state update must happen outside this functional update if we rely on newTabs
-        // But we are inside setTabs.
-        // We can't update activeTabId state from inside setTabs callback safely if it depends on the result.
-        // Actually, we can just do it in a useEffect or logic before setTabs.
-        // But since we need the previous state...
+    const newTabs = tabs.filter(t => t.id !== id);
+    setTabs(newTabs);
 
-        // Let's change the logic to not use functional update for complex dependent state or handle it better.
-        // Or we can just calculate nextActiveId here but we can't call setActiveTabId from here.
-        return prev; // Fallback, we will handle logic outside
-      }
-      return newTabs;
-    });
-  }, [activeTabId]);
-
-  // Refined closeTab to handle active tab switching properly
-  const closeTabRefined = useCallback((id: string) => {
-    setTabs(prev => {
-      if (prev.length <= 1 && prev[0].id === id) return prev; // Don't close last tab
-
-      const index = prev.findIndex(t => t.id === id);
-      if (index === -1) return prev;
-
-      const newTabs = prev.filter(t => t.id !== id);
-
-      if (id === activeTabId) {
-        // Switch to the tab to the left, or the last tab if index 0
+    if (id === activeTabId) {
         const nextIndex = Math.max(0, index - 1);
-        // If we closed the only tab (prevented above) or something
-        // Just pick the one at nextIndex if it exists
+        // If newTabs is empty (shouldn't happen due to check above), this would fail.
         if (newTabs.length > 0) {
-           setActiveTabId(newTabs[Math.min(nextIndex, newTabs.length - 1)].id);
+            const nextTab = newTabs[Math.min(nextIndex, newTabs.length - 1)];
+            setActiveTabId(nextTab.id);
         }
-      }
-      return newTabs;
-    });
-  }, [activeTabId]);
+    }
+  }, [tabs, activeTabId]);
 
   const setActiveTab = useCallback((id: string) => {
     setActiveTabId(id);
@@ -79,7 +52,7 @@ export const useTabManager = (): TabManager => {
     tabs,
     activeTabId,
     createTab,
-    closeTab: closeTabRefined,
+    closeTab,
     setActiveTab,
     updateTab,
   };

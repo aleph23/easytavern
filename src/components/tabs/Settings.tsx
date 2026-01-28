@@ -1,33 +1,23 @@
 import { useState } from 'react';
-import { X, Plus, Trash2, Check, Eye, EyeOff, RefreshCw } from 'lucide-react';
-import { AppSettings, APIProvider, ChatSettings } from '@/types/chat';
+import { Plus, Trash2, Check, Eye, EyeOff, RefreshCw } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useSettings } from '@/hooks/useSettings';
+import { useTabs } from '@/contexts/TabContext';
 
-interface SettingsPanelProps {
-  isOpen: boolean;
-  onClose: () => void;
-  settings: AppSettings;
-  onUpdateProvider: (id: string, updates: Partial<APIProvider>) => void;
-  onUpdateChatSettings: (updates: Partial<ChatSettings>) => void;
-  onAddProvider: (provider: APIProvider) => void;
-  onRemoveProvider: (id: string) => void;
-  onReset: () => void;
-}
+export const Settings = () => {
+  const {
+    settings,
+    updateProvider,
+    addProvider,
+    removeProvider,
+    updateChatSettings,
+    resetSettings
+  } = useSettings();
 
-export const SettingsPanel = ({
-  isOpen,
-  onClose,
-  settings,
-  onUpdateProvider,
-  onUpdateChatSettings,
-  onAddProvider,
-  onRemoveProvider,
-  onReset,
-}: SettingsPanelProps) => {
+  const { closeTab, activeTabId } = useTabs();
+
   const [activeTab, setActiveTab] = useState<'providers' | 'chat' | 'tts' | 'memory'>('providers');
   const [showApiKeys, setShowApiKeys] = useState<Record<string, boolean>>({});
-
-  if (!isOpen) return null;
 
   const enabledProviders = settings.providers.filter(p => p.enabled);
   const activeProvider = settings.providers.find(p => p.id === settings.chatSettings.activeProvider);
@@ -40,28 +30,22 @@ export const SettingsPanel = ({
   ] as const;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-      <div className="w-full max-w-2xl max-h-[85vh] glass-panel rounded-2xl overflow-hidden animate-fade-in">
-        <div className="flex items-center justify-between p-4 border-b border-border">
-          <h2 className="text-lg font-semibold">Settings</h2>
-          <button
-            onClick={onClose}
-            className="p-2 hover:bg-secondary rounded-lg transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
+    <div className="h-full flex flex-col bg-background max-w-4xl mx-auto p-6">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-2xl font-bold">Settings</h2>
+      </div>
 
-        <div className="flex border-b border-border">
+      <div className="glass-panel rounded-2xl overflow-hidden flex flex-col flex-1 border border-border shadow-sm">
+        <div className="flex border-b border-border bg-muted/30">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={cn(
-                'flex-1 px-4 py-3 text-sm font-medium transition-colors',
+                'flex-1 px-4 py-4 text-sm font-medium transition-colors border-b-2',
                 activeTab === tab.id
-                  ? 'text-primary border-b-2 border-primary'
-                  : 'text-muted-foreground hover:text-foreground'
+                  ? 'text-primary border-primary bg-background'
+                  : 'text-muted-foreground border-transparent hover:text-foreground hover:bg-muted/50'
               )}
             >
               {tab.label}
@@ -69,7 +53,7 @@ export const SettingsPanel = ({
           ))}
         </div>
 
-        <div className="p-4 overflow-y-auto max-h-[60vh] scrollbar-thin">
+        <div className="p-6 overflow-y-auto flex-1 scrollbar-thin">
           {activeTab === 'providers' && (
             <div className="space-y-4">
               {settings.providers.map((provider) => (
@@ -86,7 +70,7 @@ export const SettingsPanel = ({
                         <input
                           type="checkbox"
                           checked={provider.enabled}
-                          onChange={(e) => onUpdateProvider(provider.id, { enabled: e.target.checked })}
+                          onChange={(e) => updateProvider(provider.id, { enabled: e.target.checked })}
                           className="w-4 h-4 rounded border-border bg-secondary accent-primary"
                         />
                         <span className="font-medium">{provider.name}</span>
@@ -95,9 +79,9 @@ export const SettingsPanel = ({
                         {provider.type}
                       </span>
                     </div>
-                    {!['ollama', 'openai', 'anthropic'].includes(provider.id) && (
+                    {!['ollama', 'openai', 'anthropic', 'webllm'].includes(provider.id) && (
                       <button
-                        onClick={() => onRemoveProvider(provider.id)}
+                        onClick={() => removeProvider(provider.id)}
                         className="p-1 text-destructive hover:bg-destructive/10 rounded transition-colors"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -111,19 +95,20 @@ export const SettingsPanel = ({
                       <input
                         type="text"
                         value={provider.baseUrl}
-                        onChange={(e) => onUpdateProvider(provider.id, { baseUrl: e.target.value })}
-                        className="w-full mt-1 px-3 py-2 bg-background border border-border rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-primary"
+                        onChange={(e) => updateProvider(provider.id, { baseUrl: e.target.value })}
+                        disabled={provider.type === 'webllm'}
+                        className="w-full mt-1 px-3 py-2 bg-background border border-border rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-primary disabled:opacity-50"
                       />
                     </div>
 
-                    {provider.type !== 'ollama' && provider.type !== 'koboldcpp' && provider.type !== 'llamacpp' && (
+                    {provider.type !== 'ollama' && provider.type !== 'koboldcpp' && provider.type !== 'llamacpp' && provider.type !== 'webllm' && (
                       <div>
                         <label className="text-xs text-muted-foreground">API Key</label>
                         <div className="relative mt-1">
                           <input
                             type={showApiKeys[provider.id] ? 'text' : 'password'}
                             value={provider.apiKey || ''}
-                            onChange={(e) => onUpdateProvider(provider.id, { apiKey: e.target.value })}
+                            onChange={(e) => updateProvider(provider.id, { apiKey: e.target.value })}
                             placeholder="sk-..."
                             className="w-full px-3 py-2 pr-10 bg-background border border-border rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-primary font-mono"
                           />
@@ -142,7 +127,7 @@ export const SettingsPanel = ({
                       <input
                         type="text"
                         value={provider.models.join(', ')}
-                        onChange={(e) => onUpdateProvider(provider.id, { 
+                        onChange={(e) => updateProvider(provider.id, {
                           models: e.target.value.split(',').map(m => m.trim()).filter(Boolean)
                         })}
                         className="w-full mt-1 px-3 py-2 bg-background border border-border rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-primary font-mono"
@@ -153,7 +138,7 @@ export const SettingsPanel = ({
               ))}
 
               <button
-                onClick={() => onAddProvider({
+                onClick={() => addProvider({
                   id: `custom-${Date.now()}`,
                   name: 'Custom Provider',
                   type: 'custom',
@@ -176,7 +161,7 @@ export const SettingsPanel = ({
                   <label className="text-xs text-muted-foreground">Active Provider</label>
                   <select
                     value={settings.chatSettings.activeProvider}
-                    onChange={(e) => onUpdateChatSettings({ activeProvider: e.target.value })}
+                    onChange={(e) => updateChatSettings({ activeProvider: e.target.value })}
                     className="w-full mt-1 px-3 py-2 bg-background border border-border rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-primary"
                   >
                     {enabledProviders.map((p) => (
@@ -189,7 +174,7 @@ export const SettingsPanel = ({
                   <label className="text-xs text-muted-foreground">Model</label>
                   <select
                     value={settings.chatSettings.activeModel}
-                    onChange={(e) => onUpdateChatSettings({ activeModel: e.target.value })}
+                    onChange={(e) => updateChatSettings({ activeModel: e.target.value })}
                     className="w-full mt-1 px-3 py-2 bg-background border border-border rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-primary"
                   >
                     {activeProvider?.models.map((m) => (
@@ -203,7 +188,7 @@ export const SettingsPanel = ({
                 <label className="text-xs text-muted-foreground">System Prompt</label>
                 <textarea
                   value={settings.chatSettings.systemPrompt}
-                  onChange={(e) => onUpdateChatSettings({ systemPrompt: e.target.value })}
+                  onChange={(e) => updateChatSettings({ systemPrompt: e.target.value })}
                   rows={4}
                   className="w-full mt-1 px-3 py-2 bg-background border border-border rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-primary resize-none"
                 />
@@ -221,7 +206,7 @@ export const SettingsPanel = ({
                     max="2"
                     step="0.1"
                     value={settings.chatSettings.temperature}
-                    onChange={(e) => onUpdateChatSettings({ temperature: parseFloat(e.target.value) })}
+                    onChange={(e) => updateChatSettings({ temperature: parseFloat(e.target.value) })}
                     className="w-full mt-1 accent-primary"
                   />
                 </div>
@@ -237,7 +222,7 @@ export const SettingsPanel = ({
                     max="8192"
                     step="256"
                     value={settings.chatSettings.maxTokens}
-                    onChange={(e) => onUpdateChatSettings({ maxTokens: parseInt(e.target.value) })}
+                    onChange={(e) => updateChatSettings({ maxTokens: parseInt(e.target.value) })}
                     className="w-full mt-1 accent-primary"
                   />
                 </div>
@@ -253,7 +238,7 @@ export const SettingsPanel = ({
                     max="1"
                     step="0.05"
                     value={settings.chatSettings.topP}
-                    onChange={(e) => onUpdateChatSettings({ topP: parseFloat(e.target.value) })}
+                    onChange={(e) => updateChatSettings({ topP: parseFloat(e.target.value) })}
                     className="w-full mt-1 accent-primary"
                   />
                 </div>
@@ -269,7 +254,7 @@ export const SettingsPanel = ({
                     max="2"
                     step="0.1"
                     value={settings.chatSettings.frequencyPenalty}
-                    onChange={(e) => onUpdateChatSettings({ frequencyPenalty: parseFloat(e.target.value) })}
+                    onChange={(e) => updateChatSettings({ frequencyPenalty: parseFloat(e.target.value) })}
                     className="w-full mt-1 accent-primary"
                   />
                 </div>
@@ -292,16 +277,16 @@ export const SettingsPanel = ({
           )}
         </div>
 
-        <div className="flex justify-between p-4 border-t border-border">
+        <div className="flex justify-between p-4 border-t border-border bg-muted/30">
           <button
-            onClick={onReset}
+            onClick={resetSettings}
             className="px-4 py-2 text-sm text-muted-foreground hover:text-foreground flex items-center gap-2 transition-colors"
           >
             <RefreshCw className="w-4 h-4" />
             Reset to Defaults
           </button>
           <button
-            onClick={onClose}
+            onClick={() => closeTab(activeTabId)}
             className="px-4 py-2 text-sm bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 flex items-center gap-2 transition-colors"
           >
             <Check className="w-4 h-4" />
