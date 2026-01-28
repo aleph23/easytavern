@@ -1,5 +1,6 @@
-@import "tailwindcss";
-@config "../tailwind.config.js";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
@@ -55,15 +56,12 @@
 
 @layer base {
   * {
-    border-color: hsl(var(--border));
+    @apply border-border;
   }
 
   body {
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
+    @apply bg-background text-foreground font-sans antialiased;
     font-family: 'Inter', sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
   }
 
   .font-mono {
@@ -73,10 +71,7 @@
 
 @layer components {
   .glass-panel {
-    background-color: hsl(var(--card) / 0.8);
-    backdrop-filter: blur(24px);
-    border-width: 1px;
-    border-color: hsl(var(--border));
+    @apply bg-card/80 backdrop-blur-xl border border-border/50;
   }
 
   .glow-border {
@@ -84,20 +79,15 @@
   }
 
   .message-user {
-    background-image: linear-gradient(to right, hsl(var(--chat-user)), hsl(var(--chat-user) / 0.8));
+    @apply bg-gradient-to-r from-[hsl(var(--chat-user))] to-[hsl(var(--chat-user)/0.8)];
   }
 
   .message-assistant {
-    background-image: linear-gradient(to right, hsl(var(--chat-assistant) / 0.15), hsl(var(--chat-assistant) / 0.05));
-    border-left-width: 2px;
-    border-left-color: hsl(var(--chat-assistant));
+    @apply bg-gradient-to-r from-[hsl(var(--chat-assistant)/0.15)] to-[hsl(var(--chat-assistant)/0.05)] border-l-2 border-[hsl(var(--chat-assistant))];
   }
 
   .message-system {
-    background-color: hsl(var(--chat-system) / 0.1);
-    border-width: 1px;
-    border-color: hsl(var(--chat-system) / 0.3);
-    color: hsl(var(--chat-system));
+    @apply bg-[hsl(var(--chat-system)/0.1)] border border-[hsl(var(--chat-system)/0.3)] text-[hsl(var(--chat-system))];
   }
 
   .scrollbar-thin {
@@ -125,9 +115,6 @@
 
 @layer utilities {
   .text-gradient {
-    background-image: linear-gradient(to right, hsl(var(--primary)), hsl(var(--accent)));
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent;
+    @apply bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent;
   }
 }

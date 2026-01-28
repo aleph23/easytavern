@@ -1,8 +1,7 @@
 import React from 'react';
 import { Tab } from '@/types/tabs';
 import { cn } from '@/lib/utils';
-import { Chat } from './Chat';
-import { Settings } from './Settings';
+import Index from '@/pages/Index';
 
 interface TabContentProps {
   tab: Tab;
@@ -18,9 +17,7 @@ export const TabContent: React.FC<TabContentProps> = ({ tab, isActive }) => {
       )}
     >
       {tab.type === 'chat' ? (
-        <Chat />
-      ) : tab.type === 'settings' ? (
-        <Settings />
+        <Index />
       ) : (
         <div className="flex items-center justify-center h-full text-muted-foreground">
           Tab type {tab.type} not implemented

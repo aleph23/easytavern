@@ -1,10 +1,10 @@
 import React from 'react';
 import { TabBar } from './TabBar';
 import { TabContent } from './TabContent';
-import { useTabs } from '@/contexts/TabContext';
+import { useTabManager } from '@/hooks/useTabManager';
 
 export const TabManager = () => {
-  const { tabs, activeTabId, createTab, closeTab, setActiveTab } = useTabs();
+  const { tabs, activeTabId, createTab, closeTab, setActiveTab } = useTabManager();
 
   return (
     <div className="h-screen flex flex-col bg-background overflow-hidden">
