@@ -217,6 +217,7 @@ ipcMain.handle('app:getDataPath', async () => {
 });
 
 ipcMain.handle('app:getPath', async (_event, name: string) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return app.getPath(name as any);
 });
 
@@ -232,6 +233,7 @@ ipcMain.handle('settings:read', async () => {
   }
 });
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 ipcMain.handle('settings:write', async (_event, settings: any) => {
   try {
     const settingsPath = path.join(getAppDataPath(), 'settings', 'app-settings.json');
