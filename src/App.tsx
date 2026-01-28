@@ -3,7 +3,6 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { TabManager } from "@/components/tabs/TabManager";
-import { TabProvider } from "@/contexts/TabContext";
 
 const queryClient = new QueryClient();
 
@@ -12,9 +11,7 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <TabProvider>
-        <TabManager />
-      </TabProvider>
+      <TabManager />
     </TooltipProvider>
   </QueryClientProvider>
 );
