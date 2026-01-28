@@ -5,13 +5,12 @@ import { Header } from '@/components/layout/Header';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { ChatArea } from '@/components/chat/ChatArea';
 import { ChatInput } from '@/components/chat/ChatInput';
-import { SettingsPanel } from '@/components/settings/SettingsPanel';
 import { Character } from '@/types/chat';
 import { toast } from '@/hooks/use-toast';
+import { useTabManager } from '@/hooks/useTabManager';
 
-const Index = () => {
+export const Chat = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [settingsOpen, setSettingsOpen] = useState(false);
   const [activeCharacter, setActiveCharacter] = useState<Character | undefined>();
   
   const { 
@@ -26,11 +25,7 @@ const Index = () => {
 
   const {
     settings,
-    updateProvider,
-    addProvider,
-    removeProvider,
     updateChatSettings,
-    resetSettings,
   } = useSettings();
 
   const handleSend = async (content: string) => {
@@ -41,7 +36,8 @@ const Index = () => {
         description: 'Please enable at least one API provider in settings.',
         variant: 'destructive',
       });
-      setSettingsOpen(true);
+      // In new architecture, we should probably open Settings tab
+      // createTab('settings'); // This would need to be passed down or accessed via context if we want to switch tabs from here
       return;
     }
 
@@ -72,7 +68,13 @@ const Index = () => {
 
       <div className="flex-1 flex flex-col min-w-0">
         <Header
-          onOpenSettings={() => setSettingsOpen(true)}
+          onOpenSettings={() => {
+            // We can't easily open settings tab from here without context or prop
+            // But for now, let's just log or ignore, or implement a way to signal up
+            // Ideally, Header should dispatch an event or we use a global TabContext
+             const event = new CustomEvent('open-settings-tab');
+             window.dispatchEvent(event);
+          }}
           onClearChat={clearMessages}
           onToggleSidebar={() => setSidebarOpen(true)}
           settings={settings.chatSettings}
@@ -99,19 +101,6 @@ const Index = () => {
           />
         </div>
       </div>
-
-      <SettingsPanel
-        isOpen={settingsOpen}
-        onClose={() => setSettingsOpen(false)}
-        settings={settings}
-        onUpdateProvider={updateProvider}
-        onUpdateChatSettings={updateChatSettings}
-        onAddProvider={addProvider}
-        onRemoveProvider={removeProvider}
-        onReset={resetSettings}
-      />
     </div>
   );
 };
-
-export default Index;

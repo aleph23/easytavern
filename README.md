@@ -79,16 +79,16 @@ So Why can't there be something like SillyTavern, deeply customizable and a feat
   - [ ] `npm install glass-ui`
   - [ ] `npm install @aceternity/aceternity-ui`
   - [ ] `npm install framer-motion`
-  - [ ] `npm install lucide-react`
-- [ ] Update `src/pages/Index.tsx`:
-  - [ ] Replace single-page layout with tab-based structure
-  - [ ] Integrate tab bar component
-  - [ ] Add tab content router
-  - [ ] Implement responsive design
-- [ ] Create `src/components/tabs/Chat.tsx`:
-  - [ ] Move existing chat interface into tab component
-  - [ ] Add tab-specific state management
-  - [ ] Implement tab-specific settings
+  - [x] `npm install lucide-react`
+- [x] Update `src/pages/Index.tsx` (Migrated to `src/components/tabs/Chat.tsx`):
+  - [x] Replace single-page layout with tab-based structure
+  - [x] Integrate tab bar component
+  - [x] Add tab content router
+  - [x] Implement responsive design
+- [x] Create `src/components/tabs/Chat.tsx`:
+  - [x] Move existing chat interface into tab component
+  - [x] Add tab-specific state management
+  - [x] Implement tab-specific settings
 - [ ] Create `src/components/tabs/Settings.tsx`:
   - [ ] Extract settings panel from main layout
   - [ ] Add tab-specific settings categories
