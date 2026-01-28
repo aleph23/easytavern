@@ -1,7 +1,10 @@
 {
-  "name": "vite_react_shadcn_ts",
+  "name": "easy-tavern",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "main": "dist-electron/main.js",
+  "author": "EasyTavern Team",
+  "description": "Desktop AI Chat Application",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,7 +13,11 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "electron:build": "tsc -p electron",
+    "electron:start": "npm run electron:build && electron .",
+    "electron:dev": "concurrently -k \"npm run dev\" \"npm run electron:start\"",
+    "dist": "npm run build && npm run electron:build && electron-builder"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
