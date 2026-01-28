@@ -1,5 +1,6 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { AppSettings, APIProvider, ChatSettings } from '@/types/chat';
+import { electronApi } from '@/lib/electron-api';
 
 const DEFAULT_PROVIDERS: APIProvider[] = [
   {
@@ -90,9 +91,40 @@ export const useSettings = () => {
     return { providers: DEFAULT_PROVIDERS, chatSettings: DEFAULT_CHAT_SETTINGS };
   });
 
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  // Initial load
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
-  }, [settings]);
+    const loadSettings = async () => {
+      if (electronApi.isAvailable()) {
+        try {
+          const res = await electronApi.settings.read();
+          if (res.success && res.data) {
+            setSettings(res.data);
+          }
+          // If no data, we keep the initial state (from localStorage)
+          // and it will be saved to file in the next effect
+        } catch (error) {
+          console.error('Failed to load settings from file:', error);
+        }
+      }
+      setIsLoaded(true);
+    };
+    loadSettings();
+  }, []);
+
+  // Persistence
+  useEffect(() => {
+    if (!isLoaded) return;
+
+    if (electronApi.isAvailable()) {
+      electronApi.settings.write(settings).catch(err =>
+        console.error('Failed to save settings to file:', err)
+      );
+    } else {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+    }
+  }, [settings, isLoaded]);
 
   const updateProvider = useCallback((id: string, updates: Partial<APIProvider>) => {
     setSettings(prev => ({
@@ -135,5 +167,6 @@ export const useSettings = () => {
     removeProvider,
     updateChatSettings,
     resetSettings,
+    isLoaded
   };
 };

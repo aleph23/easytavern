@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tab } from '@/types/tab';
+import { Tab } from '@/types/tabs';
 import { X, Plus, MessageSquare, Settings, User, Box, Globe } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';

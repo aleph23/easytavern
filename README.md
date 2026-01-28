@@ -37,40 +37,40 @@ So Why can't there be something like SillyTavern, deeply customizable and a feat
   - [ ] File system abstraction layer
 
 ### 1.2 File System Access Layer
-- [ ] Create `src/lib/electron-api.ts` with:
-  - [ ] IPC communication wrapper functions
-  - [ ] File read/write operations
-  - [ ] Directory operations
-  - [ ] Dialog operations (open/save)
-- [ ] Update `src/hooks/useSettings.ts`:
-  - [ ] Replace localStorage with file-based storage
-  - [ ] Implement Electron app data directory usage
-  - [ ] Add file change detection for settings updates
-  - [ ] Create migration script for localStorage data
+- [x] Create `src/lib/electron-api.ts` with:
+  - [x] IPC communication wrapper functions
+  - [x] File read/write operations
+  - [x] Directory operations
+  - [x] Dialog operations (open/save)
+- [x] Update `src/hooks/useSettings.ts`:
+  - [x] Replace localStorage with file-based storage
+  - [x] Implement Electron app data directory usage
+  - [x] Add file change detection for settings updates
+  - [x] Create migration script for localStorage data
 
 ## Tab-Based Interface Architecture
 
 ### 2.1 Tab Management System
-- [ ] Create `src/types/tabs.ts` with:
-  - [ ] Tab interface definition
-  - [ ] TabType enum (chat, character-editor, settings, extensions, world-info)
-  - [ ] TabManager interface
-  - [ ] Tab state interfaces
-- [ ] Create `src/hooks/useTabManager.ts` with:
-  - [ ] Tab state management (create, close, switch, reorder)
+- [x] Create `src/types/tabs.ts` with:
+  - [x] Tab interface definition
+  - [x] TabType enum (chat, character-editor, settings, extensions, world-info)
+  - [x] TabManager interface
+  - [x] Tab state interfaces
+- [x] Create `src/hooks/useTabManager.ts` with:
+  - [x] Tab state management (create, close, switch, reorder)
   - [ ] Tab persistence logic
   - [ ] Tab data management
   - [ ] Tab history tracking
-- [ ] Create `src/components/tabs/tabBar.tsx`:
+- [x] Create `src/components/tabs/tabBar.tsx`:
   - [ ] Draggable tab interface
-  - [ ] Close button functionality
+  - [x] Close button functionality
   - [ ] New tab dropdown menu
   - [ ] Tab reordering support
-  - [ ] Hover effects and animations
-- [ ] Create `src/components/tabs/tabContent.tsx`:
-  - [ ] Tab routing logic
+  - [x] Hover effects and animations
+- [x] Create `src/components/tabs/tabContent.tsx`:
+  - [x] Tab routing logic
   - [ ] Lazy loading for tab components
-  - [ ] Tab transition animations
+  - [x] Tab transition animations
   - [ ] Error boundary for tab content
 
 ### 2.2 Main Layout Refactor
