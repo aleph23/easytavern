@@ -1,0 +1,18 @@
+import { GlassButton } from "@/components/ui/glass-button"
+
+export default function GlassButtonDemo() {
+    return (
+      <div className="w-full max-w-4xl">
+        <div className="p-2">
+          <h3 className="text-xl font-semibold">GlassButton</h3>
+        </div>
+        <div className="min-h-[200px] p-4 flex flex-col justify-center items-center border border-dashed rounded-lg space-y-4">
+          <GlassButton>Click me</GlassButton>
+          <GlassButton variant="secondary">Secondary</GlassButton>
+          <GlassButton variant="outline">Outline</GlassButton>
+          <GlassButton disabled>Disabled</GlassButton>
+        </div>
+      </div>
+    )
+  }
+  
