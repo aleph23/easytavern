@@ -63,19 +63,6 @@ const DEFAULT_PROVIDERS: APIProvider[] = [
     models: ['local-model'],
     enabled: false,
   },
-  {
-    id: 'webllm',
-    name: 'WebLLM (In-Browser)',
-    type: 'webllm',
-    baseUrl: '',
-    models: [
-      'Llama-3.2-3B-Instruct-q4f32_1-MLC',
-      'Llama-3-8B-Instruct-q4f32_1-MLC',
-      'Hermes-2-Pro-Llama-3-8B-q4f16_1-MLC',
-      'Phi-3.5-mini-instruct-q4f16_1-MLC',
-    ],
-    enabled: false,
-  },
 ];
 
 const DEFAULT_CHAT_SETTINGS: ChatSettings = {

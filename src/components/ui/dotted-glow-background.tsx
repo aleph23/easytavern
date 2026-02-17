@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 
 type DottedGlowBackgroundProps = {
   className?: string;
+<<<<<<< HEAD
   /** distance between dot centers in pixels */
   gap?: number;
   /** base radius of each dot in CSS px */
@@ -42,6 +43,25 @@ type DottedGlowBackgroundProps = {
  * - Each dot gets its own phase + speed producing organic shimmering.
  * - Handles high-DPI and resizes via ResizeObserver.
  */
+=======
+  gap?: number;
+  radius?: number;
+  color?: string;
+  darkColor?: string;
+  glowColor?: string;
+  darkGlowColor?: string;
+  colorLightVar?: string;
+  colorDarkVar?: string;
+  glowColorLightVar?: string;
+  glowColorDarkVar?: string;
+  opacity?: number;
+  backgroundOpacity?: number;
+  speedMin?: number;
+  speedMax?: number;
+  speedScale?: number;
+};
+
+>>>>>>> e783a8b3888ca86c7021b5ad89348742cc7f46f9
 export const DottedGlowBackground = ({
   className,
   gap = 12,
@@ -60,12 +80,20 @@ export const DottedGlowBackground = ({
   speedMax = 1.3,
   speedScale = 1,
 }: DottedGlowBackgroundProps) => {
+<<<<<<< HEAD
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [resolvedColor, setResolvedColor] = useState<string>(color);
   const [resolvedGlowColor, setResolvedGlowColor] = useState<string>(glowColor);
 
   // Resolve CSS variable value from the container or root
+=======
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [resolvedColor, setResolvedColor] = useState(color);
+  const [resolvedGlowColor, setResolvedGlowColor] = useState(glowColor);
+
+>>>>>>> e783a8b3888ca86c7021b5ad89348742cc7f46f9
   const resolveCssVariable = (
     el: Element,
     variableName?: string,
@@ -93,7 +121,10 @@ export const DottedGlowBackground = ({
     );
   };
 
+<<<<<<< HEAD
   // Keep resolved colors in sync with theme changes and prop updates
+=======
+>>>>>>> e783a8b3888ca86c7021b5ad89348742cc7f46f9
   useEffect(() => {
     const container = containerRef.current ?? document.documentElement;
 
@@ -174,7 +205,10 @@ export const DottedGlowBackground = ({
     ro.observe(container);
     resize();
 
+<<<<<<< HEAD
     // Precompute dot metadata for a medium-sized grid and regenerate on resize
+=======
+>>>>>>> e783a8b3888ca86c7021b5ad89348742cc7f46f9
     let dots: { x: number; y: number; phase: number; speed: number }[] = [];
 
     const regenDots = () => {
@@ -186,35 +220,52 @@ export const DottedGlowBackground = ({
       const max = Math.max(speedMin, speedMax);
       for (let i = -1; i < cols; i++) {
         for (let j = -1; j < rows; j++) {
+<<<<<<< HEAD
           const x = i * gap + (j % 2 === 0 ? 0 : gap * 0.5); // offset every other row
           const y = j * gap;
           // Randomize phase and speed slightly per dot
           const phase = Math.random() * Math.PI * 2;
           const span = Math.max(max - min, 0);
           const speed = min + Math.random() * span; // configurable rad/s
+=======
+          const x = i * gap + (j % 2 === 0 ? 0 : gap * 0.5);
+          const y = j * gap;
+          const phase = Math.random() * Math.PI * 2;
+          const span = Math.max(max - min, 0);
+          const speed = min + Math.random() * span;
+>>>>>>> e783a8b3888ca86c7021b5ad89348742cc7f46f9
           dots.push({ x, y, phase, speed });
         }
       }
     };
 
+<<<<<<< HEAD
     const regenThrottled = () => {
       regenDots();
     };
 
+=======
+>>>>>>> e783a8b3888ca86c7021b5ad89348742cc7f46f9
     regenDots();
 
     let last = performance.now();
 
     const draw = (now: number) => {
       if (stopped) return;
+<<<<<<< HEAD
       const dt = (now - last) / 1000; // seconds
       last = now;
+=======
+>>>>>>> e783a8b3888ca86c7021b5ad89348742cc7f46f9
       const { width, height } = container.getBoundingClientRect();
 
       ctx.clearRect(0, 0, el.width, el.height);
       ctx.globalAlpha = opacity;
 
+<<<<<<< HEAD
       // optional subtle background fade for depth (defaults to 0 = transparent)
+=======
+>>>>>>> e783a8b3888ca86c7021b5ad89348742cc7f46f9
       if (backgroundOpacity > 0) {
         const grad = ctx.createRadialGradient(
           width * 0.5,
@@ -233,13 +284,17 @@ export const DottedGlowBackground = ({
         ctx.fillRect(0, 0, width, height);
       }
 
+<<<<<<< HEAD
       // animate dots
+=======
+>>>>>>> e783a8b3888ca86c7021b5ad89348742cc7f46f9
       ctx.save();
       ctx.fillStyle = resolvedColor;
 
       const time = (now / 1000) * Math.max(speedScale, 0);
       for (let i = 0; i < dots.length; i++) {
         const d = dots[i];
+<<<<<<< HEAD
         // Linear triangle wave 0..1..0 for linear glow/dim
         const mod = (time * d.speed + d.phase) % 2;
         const lin = mod < 1 ? mod : 2 - mod; // 0..1..0
@@ -248,6 +303,14 @@ export const DottedGlowBackground = ({
         // draw glow when bright
         if (a > 0.6) {
           const glow = (a - 0.6) / 0.4; // 0..1
+=======
+        const mod = (time * d.speed + d.phase) % 2;
+        const lin = mod < 1 ? mod : 2 - mod;
+        const a = 0.25 + 0.55 * lin;
+
+        if (a > 0.6) {
+          const glow = (a - 0.6) / 0.4;
+>>>>>>> e783a8b3888ca86c7021b5ad89348742cc7f46f9
           ctx.shadowColor = resolvedGlowColor;
           ctx.shadowBlur = 6 * glow;
         } else {
@@ -267,7 +330,11 @@ export const DottedGlowBackground = ({
 
     const handleResize = () => {
       resize();
+<<<<<<< HEAD
       regenThrottled();
+=======
+      regenDots();
+>>>>>>> e783a8b3888ca86c7021b5ad89348742cc7f46f9
     };
 
     window.addEventListener("resize", handleResize);
@@ -295,11 +362,24 @@ export const DottedGlowBackground = ({
     <div
       ref={containerRef}
       className={className}
+<<<<<<< HEAD
       style={{ position: "absolute", inset: 0 }}
     >
       <canvas
         ref={canvasRef}
         style={{ display: "block", width: "100%", height: "100%" }}
+=======
+      style={{ position: "relative", overflow: "hidden" }}
+    >
+      <canvas
+        ref={canvasRef}
+        style={{
+          position: "absolute",
+          inset: 0,
+          pointerEvents: "none",
+          zIndex: 0,
+        }}
+>>>>>>> e783a8b3888ca86c7021b5ad89348742cc7f46f9
       />
     </div>
   );

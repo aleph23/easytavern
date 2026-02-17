@@ -18,7 +18,7 @@ export interface Character {
 export interface APIProvider {
   id: string;
   name: string;
-  type: 'openai' | 'anthropic' | 'ollama' | 'koboldcpp' | 'llamacpp' | 'openrouter' | 'webllm' | 'custom';
+  type: 'openai' | 'anthropic' | 'ollama' | 'koboldcpp' | 'llamacpp' | 'openrouter' | 'custom';
   baseUrl: string;
   apiKey?: string;
   models: string[];
