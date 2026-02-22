@@ -173,12 +173,30 @@ ipcMain.handle('fs:readFile', async (_event, filePath: string) => {
   }
 });
 
-ipcMain.handle('fs:writeFile', async (_event, filePath: string, content: string) => {
+ipcMain.handle('fs:writeFile', async (_event, filePath: string, content: string | Buffer) => {
   try {
-    await fs.writeFile(filePath, content, 'utf-8');
+    await fs.writeFile(filePath, content);
     return { success: true };
   } catch (error) {
     return { success: false, error: (error as Error).message };
+  }
+});
+
+ipcMain.handle('fs:createDir', async (_event, dirPath: string) => {
+  try {
+    await fs.mkdir(dirPath, { recursive: true });
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: (error as Error).message };
+  }
+});
+
+ipcMain.handle('fs:exists', async (_event, filePath: string) => {
+  try {
+    await fs.access(filePath);
+    return { success: true, exists: true };
+  } catch {
+    return { success: true, exists: false };
   }
 });
 

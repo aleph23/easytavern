@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { AppSettings, APIProvider, ChatSettings } from '@/types/chat';
+import { ImageGenerationSettings, ImageProvider } from '@/types/image-generation';
 import { electronApi } from '@/lib/electron-api';
 
 const DEFAULT_PROVIDERS: APIProvider[] = [
@@ -76,6 +77,64 @@ const DEFAULT_CHAT_SETTINGS: ChatSettings = {
   systemPrompt: 'You are a helpful assistant.',
 };
 
+const DEFAULT_IMAGE_PROVIDERS: ImageProvider[] = [
+  {
+    id: 'automatic1111',
+    name: 'Automatic1111',
+    type: 'automatic1111',
+    baseUrl: 'http://localhost:7860',
+    enabled: true,
+  },
+  {
+    id: 'openai',
+    name: 'OpenAI (DALL-E)',
+    type: 'openai',
+    baseUrl: 'https://api.openai.com/v1',
+    apiKey: '',
+    enabled: false,
+  },
+  {
+    id: 'pollinations',
+    name: 'Pollinations.ai',
+    type: 'pollinations',
+    baseUrl: 'https://image.pollinations.ai',
+    enabled: false,
+  },
+  {
+    id: 'openrouter-image',
+    name: 'OpenRouter',
+    type: 'openrouter',
+    baseUrl: 'https://openrouter.ai/api/v1',
+    apiKey: '',
+    enabled: false,
+  },
+  {
+    id: 'chutes',
+    name: 'Chutes.ai',
+    type: 'chutes',
+    baseUrl: 'https://chutes.ai/api/v1',
+    apiKey: '',
+    enabled: false,
+  },
+  {
+    id: 'minimax',
+    name: 'MiniMax',
+    type: 'minimax',
+    baseUrl: 'https://api.minimax.chat/v1',
+    apiKey: '',
+    enabled: false,
+  }
+];
+
+const DEFAULT_IMAGE_SETTINGS: ImageGenerationSettings = {
+  enabled: true,
+  activeProvider: 'automatic1111',
+  generationFrequency: 0,
+  style: 'graphic_novel',
+  negativePrompt: 'blurry, low quality, distorted, ugly, bad anatomy',
+  providers: DEFAULT_IMAGE_PROVIDERS,
+};
+
 const STORAGE_KEY = 'nexus-chat-settings';
 
 export const useSettings = () => {
@@ -83,12 +142,27 @@ export const useSettings = () => {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
       try {
-        return JSON.parse(stored);
+        const parsed = JSON.parse(stored);
+        // Migration/Fallback for existing settings
+        return {
+          providers: parsed.providers || DEFAULT_PROVIDERS,
+          chatSettings: parsed.chatSettings || DEFAULT_CHAT_SETTINGS,
+          imageGeneration: parsed.imageGeneration || DEFAULT_IMAGE_SETTINGS,
+          activeCharacter: parsed.activeCharacter
+        };
       } catch {
-        return { providers: DEFAULT_PROVIDERS, chatSettings: DEFAULT_CHAT_SETTINGS };
+        return {
+          providers: DEFAULT_PROVIDERS,
+          chatSettings: DEFAULT_CHAT_SETTINGS,
+          imageGeneration: DEFAULT_IMAGE_SETTINGS
+        };
       }
     }
-    return { providers: DEFAULT_PROVIDERS, chatSettings: DEFAULT_CHAT_SETTINGS };
+    return {
+      providers: DEFAULT_PROVIDERS,
+      chatSettings: DEFAULT_CHAT_SETTINGS,
+      imageGeneration: DEFAULT_IMAGE_SETTINGS
+    };
   });
 
   const [isLoaded, setIsLoaded] = useState(false);
@@ -100,7 +174,11 @@ export const useSettings = () => {
         try {
           const res = await electronApi.settings.read();
           if (res.success && res.data) {
-            setSettings(res.data);
+            setSettings(prev => ({
+              ...prev, // Keep defaults if missing in file
+              ...res.data,
+              imageGeneration: res.data.imageGeneration || DEFAULT_IMAGE_SETTINGS
+            }));
           }
           // If no data, we keep the initial state (from localStorage)
           // and it will be saved to file in the next effect
@@ -156,8 +234,31 @@ export const useSettings = () => {
     }));
   }, []);
 
+  const updateImageSettings = useCallback((updates: Partial<ImageGenerationSettings>) => {
+    setSettings(prev => ({
+      ...prev,
+      imageGeneration: { ...prev.imageGeneration, ...updates },
+    }));
+  }, []);
+
+  const updateImageProvider = useCallback((id: string, updates: Partial<ImageProvider>) => {
+    setSettings(prev => ({
+      ...prev,
+      imageGeneration: {
+        ...prev.imageGeneration,
+        providers: prev.imageGeneration.providers.map(p =>
+          p.id === id ? { ...p, ...updates } : p
+        ),
+      },
+    }));
+  }, []);
+
   const resetSettings = useCallback(() => {
-    setSettings({ providers: DEFAULT_PROVIDERS, chatSettings: DEFAULT_CHAT_SETTINGS });
+    setSettings({
+      providers: DEFAULT_PROVIDERS,
+      chatSettings: DEFAULT_CHAT_SETTINGS,
+      imageGeneration: DEFAULT_IMAGE_SETTINGS
+    });
   }, []);
 
   return {
@@ -166,6 +267,8 @@ export const useSettings = () => {
     addProvider,
     removeProvider,
     updateChatSettings,
+    updateImageSettings,
+    updateImageProvider,
     resetSettings,
     isLoaded
   };
