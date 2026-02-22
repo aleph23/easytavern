@@ -99,6 +99,22 @@ const DEFAULT_IMAGE_PROVIDERS: ImageProvider[] = [
     type: 'pollinations',
     baseUrl: 'https://image.pollinations.ai',
     enabled: false,
+  },
+  {
+    id: 'openrouter-image',
+    name: 'OpenRouter',
+    type: 'openrouter',
+    baseUrl: 'https://openrouter.ai/api/v1',
+    apiKey: '',
+    enabled: false,
+  },
+  {
+    id: 'chutes',
+    name: 'Chutes.ai',
+    type: 'chutes',
+    baseUrl: 'https://chutes.ai/api/v1',
+    apiKey: '',
+    enabled: false,
   }
 ];
 

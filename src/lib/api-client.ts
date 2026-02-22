@@ -179,14 +179,65 @@ export const apiClient = {
           result = { data: data.data[0].b64_json, format: 'base64' };
       }
       else if (provider.type === 'pollinations') {
-          const url = `${provider.baseUrl}/prompt/${encodeURIComponent(prompt)}?width=${width}&height=${height}&seed=${Math.floor(Math.random()*1000)}`;
+          const encodedPrompt = encodeURIComponent(prompt);
+          const url = `${provider.baseUrl}/prompt/${encodedPrompt}?width=${width}&height=${height}&seed=${Math.floor(Math.random()*1000)}&nologo=true`;
 
+          // Pollinations returns the image binary directly on GET/POST
           const response = await fetch(url);
           if (!response.ok) throw new Error(`Pollinations Error: ${response.status}`);
 
           const blob = await response.blob();
           const base64 = await blobToBase64(blob);
           result = { data: base64, format: 'base64' };
+      }
+      else if (provider.type === 'openrouter' || provider.type === 'chutes') {
+          // OpenRouter uses standard OpenAI format but to a different endpoint
+          // Chutes also uses standard OpenAI format
+
+          const payload = {
+            // Use configured model or fallback
+            model: provider.models?.[0] || (provider.type === 'openrouter' ? 'stabilityai/stable-diffusion-xl-base-1.0' : 'flux-pro'),
+            prompt: prompt,
+            n: 1,
+            size: `${width}x${height}`,
+          };
+
+          const headers: Record<string, string> = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${provider.apiKey}`,
+          };
+
+          if (provider.type === 'openrouter') {
+             headers['HTTP-Referer'] = 'https://easytavern.app';
+             headers['X-Title'] = 'EasyTavern';
+          }
+
+          const response = await fetch(`${provider.baseUrl}/images/generations`, {
+              method: 'POST',
+              headers,
+              body: JSON.stringify(payload)
+          });
+
+          if (!response.ok) {
+              const text = await response.text();
+              throw new Error(`${provider.name} Error: ${response.status} - ${text}`);
+          }
+
+          const data = await response.json();
+          // Check for URL or b64_json
+          // OpenRouter/Chutes usually return URL
+          if (data.data?.[0]?.b64_json) {
+              result = { data: data.data[0].b64_json, format: 'base64' };
+          } else if (data.data?.[0]?.url) {
+              const imgRes = await fetch(data.data[0].url);
+              const blob = await imgRes.blob();
+              const base64 = await blobToBase64(blob);
+              result = { data: base64, format: 'base64' };
+          } else {
+              // Fallback check for raw url in some non-standard responses?
+              // Standard is data[0].url
+              throw new Error('Invalid response format from provider');
+          }
       }
       else {
           throw new Error(`Provider type ${provider.type} not implemented`);

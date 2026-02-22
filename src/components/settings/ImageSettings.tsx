@@ -60,7 +60,7 @@ export const ImageSettings = () => {
                     onChange={(e) => updateImageProvider(activeProvider.id, { baseUrl: e.target.value })}
                 />
             </div>
-            {activeProvider.type === 'openai' && (
+            {(activeProvider.type === 'openai' || activeProvider.type === 'openrouter' || activeProvider.type === 'chutes') && (
                 <div className="space-y-2">
                     <Label>API Key</Label>
                     <Input
@@ -68,6 +68,18 @@ export const ImageSettings = () => {
                         value={activeProvider.apiKey || ''}
                         onChange={(e) => updateImageProvider(activeProvider.id, { apiKey: e.target.value })}
                     />
+                </div>
+            )}
+
+            {(activeProvider.type === 'openrouter' || activeProvider.type === 'chutes') && (
+                 <div className="space-y-2">
+                    <Label>Model (Optional)</Label>
+                    <Input
+                        value={activeProvider.models?.[0] || ''}
+                        onChange={(e) => updateImageProvider(activeProvider.id, { models: [e.target.value] })}
+                        placeholder="e.g. stabilityai/stable-diffusion-xl-base-1.0"
+                    />
+                    <p className="text-xs text-muted-foreground">Leave empty to use default</p>
                 </div>
             )}
         </div>

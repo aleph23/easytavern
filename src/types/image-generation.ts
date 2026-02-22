@@ -3,25 +3,26 @@ export type ImageStyle = 'graphic_novel' | 'realistic_anime' | 'photorealism' | 
 export interface ImageProvider {
   id: string;
   name: string;
-  type: 'automatic1111' | 'comfyui' | 'openai' | 'pollinations' | 'custom';
+  type: 'automatic1111' | 'comfyui' | 'openai' | 'pollinations' | 'chutes' | 'openrouter' | 'custom';
   baseUrl: string;
   apiKey?: string;
   enabled: boolean;
+  models?: string[]; // Optional for providers like Chutes/OpenRouter that support multiple image models
 }
 
 export interface ImageGenerationSettings {
-  enabled: boolean; // Main toggle or derived from frequency? Plan says 0 = off.
+  enabled: boolean;
   activeProvider: string;
   generationFrequency: number; // 0 = off, 1-10 turns
   style: ImageStyle;
-  customStylePrompt?: string; // Prepend text for user-defined style
+  customStylePrompt?: string;
   negativePrompt: string;
   providers: ImageProvider[];
 }
 
 export interface GeneratedImage {
   id: string;
-  path: string; // Local path relative to chat folder or absolute? Maybe relative to app data?
+  path: string;
   prompt: string;
   createdAt: number;
   provider: string;
