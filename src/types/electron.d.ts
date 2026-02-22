@@ -1,9 +1,11 @@
 export interface IElectronAPI {
   fs: {
-    readFile: (filePath: string) => Promise<{ success: boolean; data?: string; error?: string }>;
-    writeFile: (filePath: string, content: string) => Promise<{ success: boolean; error?: string }>;
+    readFile: (filePath: string) => Promise<{ success: boolean; data?: string | Buffer; error?: string }>;
+    writeFile: (filePath: string, content: string | Buffer) => Promise<{ success: boolean; error?: string }>;
     readDir: (dirPath: string) => Promise<{ success: boolean; data?: string[]; error?: string }>;
     deleteFile: (filePath: string) => Promise<{ success: boolean; error?: string }>;
+    createDir: (dirPath: string) => Promise<{ success: boolean; error?: string }>;
+    exists: (filePath: string) => Promise<{ success: boolean; exists: boolean; error?: string }>;
   };
   dialog: {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

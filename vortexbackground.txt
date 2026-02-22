@@ -1,0 +1,1086 @@
+// TS Vortex
+
+import React from "react";
+import { Vortex } from "../ui/vortex";
+
+export function VortexDemo() {
+  return (
+    <div className="w-[calc(100%-4rem)] mx-auto rounded-md  h-[30rem] overflow-hidden">
+      <Vortex
+        backgroundColor="black"
+        className="flex items-center flex-col justify-center px-2 md:px-10 py-4 w-full h-full"
+      >
+        <h2 className="text-white text-2xl md:text-6xl font-bold text-center">
+          The hell is this?
+        </h2>
+        <p className="text-white text-sm md:text-2xl max-w-xl mt-6 text-center">
+          This is chemical burn. It&apos;ll hurt more than you&apos;ve ever been
+          burned and you&apos;ll have a scar.
+        </p>
+        <div className="flex flex-col sm:flex-row items-center gap-4 mt-6">
+          <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 transition duration-200 rounded-lg text-white shadow-[0px_2px_0px_0px_#FFFFFF40_inset]">
+            Order now
+          </button>
+          <button className="px-4 py-2  text-white ">Watch trailer</button>
+        </div>
+      </Vortex>
+    </div>
+  );
+}
+
+
+// JS Vortex
+
+import React from "react";
+import { Vortex } from "../ui/vortex";
+
+export function VortexDemo() {
+  return (
+    <div
+      className="w-[calc(100%-4rem)] mx-auto rounded-md  h-[30rem] overflow-hidden">
+      <Vortex
+        backgroundColor="black"
+        className="flex items-center flex-col justify-center px-2 md:px-10 py-4 w-full h-full">
+        <h2 className="text-white text-2xl md:text-6xl font-bold text-center">
+          The hell is this?
+        </h2>
+        <p className="text-white text-sm md:text-2xl max-w-xl mt-6 text-center">
+          This is chemical burn. It&apos;ll hurt more than you&apos;ve ever been
+          burned and you&apos;ll have a scar.
+        </p>
+        <div className="flex flex-col sm:flex-row items-center gap-4 mt-6">
+          <button
+            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 transition duration-200 rounded-lg text-white shadow-[0px_2px_0px_0px_#FFFFFF40_inset]">
+            Order now
+          </button>
+          <button className="px-4 py-2  text-white ">Watch trailer</button>
+        </div>
+      </Vortex>
+    </div>
+  );
+}
+
+// TS Rain
+
+
+import React from "react";
+import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
+
+export function BackgroundBeamsWithCollisionDemo() {
+  return (
+    <BackgroundBeamsWithCollision>
+      <h2
+        className="text-2xl relative z-20 md:text-4xl lg:text-7xl font-bold text-center text-black dark:text-white font-sans tracking-tight">
+        What&apos;s cooler than Beams?{" "}
+        <div
+          className="relative mx-auto inline-block w-max [filter:drop-shadow(0px_1px_3px_rgba(27,_37,_80,_0.14))]">
+          <div
+            className="absolute left-0 top-[1px] bg-clip-text bg-no-repeat text-transparent bg-gradient-to-r py-4 from-purple-500 via-violet-500 to-pink-500 [text-shadow:0_0_rgba(0,0,0,0.1)]">
+            <span className="">Exploding beams.</span>
+          </div>
+          <div
+            className="relative bg-clip-text text-transparent bg-no-repeat bg-gradient-to-r from-purple-500 via-violet-500 to-pink-500 py-4">
+            <span className="">Exploding beams.</span>
+          </div>
+        </div>
+      </h2>
+    </BackgroundBeamsWithCollision>
+  );
+}
+
+"use client";
+import { cn } from "@/lib/utils";
+import { motion, AnimatePresence } from "motion/react";
+import React, { useRef, useState, useEffect } from "react";
+
+export const BackgroundBeamsWithCollision = ({
+  children,
+  className
+}) => {
+  const containerRef = useRef(null);
+  const parentRef = useRef(null);
+
+  const beams = [
+    {
+      initialX: 10,
+      translateX: 10,
+      duration: 7,
+      repeatDelay: 3,
+      delay: 2,
+    },
+    {
+      initialX: 600,
+      translateX: 600,
+      duration: 3,
+      repeatDelay: 3,
+      delay: 4,
+    },
+    {
+      initialX: 100,
+      translateX: 100,
+      duration: 7,
+      repeatDelay: 7,
+      className: "h-6",
+    },
+    {
+      initialX: 400,
+      translateX: 400,
+      duration: 5,
+      repeatDelay: 14,
+      delay: 4,
+    },
+    {
+      initialX: 800,
+      translateX: 800,
+      duration: 11,
+      repeatDelay: 2,
+      className: "h-20",
+    },
+    {
+      initialX: 1000,
+      translateX: 1000,
+      duration: 4,
+      repeatDelay: 2,
+      className: "h-12",
+    },
+    {
+      initialX: 1200,
+      translateX: 1200,
+      duration: 6,
+      repeatDelay: 4,
+      delay: 2,
+      className: "h-6",
+    },
+  ];
+
+  return (
+    <div
+      ref={parentRef}
+      className={cn(
+        "h-96 md:h-[40rem] bg-gradient-to-b from-white to-neutral-100 dark:from-neutral-950 dark:to-neutral-800 relative flex items-center w-full justify-center overflow-hidden",
+        // h-screen if you want bigger
+        className
+      )}>
+      {beams.map((beam) => (
+        <CollisionMechanism
+          key={beam.initialX + "beam-idx"}
+          beamOptions={beam}
+          containerRef={containerRef}
+          parentRef={parentRef} />
+      ))}
+      {children}
+      <div
+        ref={containerRef}
+        className="absolute bottom-0 bg-neutral-100 w-full inset-x-0 pointer-events-none"
+        style={{
+          boxShadow:
+            "0 0 24px rgba(34, 42, 53, 0.06), 0 1px 1px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(34, 42, 53, 0.04), 0 0 4px rgba(34, 42, 53, 0.08), 0 16px 68px rgba(47, 48, 55, 0.05), 0 1px 0 rgba(255, 255, 255, 0.1) inset",
+        }}></div>
+    </div>
+  );
+};
+
+const CollisionMechanism = React.forwardRef(({ parentRef, containerRef, beamOptions = {} }, ref) => {
+  const beamRef = useRef(null);
+  const [collision, setCollision] = useState({
+    detected: false,
+    coordinates: null,
+  });
+  const [beamKey, setBeamKey] = useState(0);
+  const [cycleCollisionDetected, setCycleCollisionDetected] = useState(false);
+
+  useEffect(() => {
+    const checkCollision = () => {
+      if (
+        beamRef.current &&
+        containerRef.current &&
+        parentRef.current &&
+        !cycleCollisionDetected
+      ) {
+        const beamRect = beamRef.current.getBoundingClientRect();
+        const containerRect = containerRef.current.getBoundingClientRect();
+        const parentRect = parentRef.current.getBoundingClientRect();
+
+        if (beamRect.bottom >= containerRect.top) {
+          const relativeX =
+            beamRect.left - parentRect.left + beamRect.width / 2;
+          const relativeY = beamRect.bottom - parentRect.top;
+
+          setCollision({
+            detected: true,
+            coordinates: {
+              x: relativeX,
+              y: relativeY,
+            },
+          });
+          setCycleCollisionDetected(true);
+        }
+      }
+    };
+
+    const animationInterval = setInterval(checkCollision, 50);
+
+    return () => clearInterval(animationInterval);
+  }, [cycleCollisionDetected, containerRef]);
+
+  useEffect(() => {
+    if (collision.detected && collision.coordinates) {
+      setTimeout(() => {
+        setCollision({ detected: false, coordinates: null });
+        setCycleCollisionDetected(false);
+      }, 2000);
+
+      setTimeout(() => {
+        setBeamKey((prevKey) => prevKey + 1);
+      }, 2000);
+    }
+  }, [collision]);
+
+  return (
+    <>
+      <motion.div
+        key={beamKey}
+        ref={beamRef}
+        animate="animate"
+        initial={{
+          translateY: beamOptions.initialY || "-200px",
+          translateX: beamOptions.initialX || "0px",
+          rotate: beamOptions.rotate || 0,
+        }}
+        variants={{
+          animate: {
+            translateY: beamOptions.translateY || "1800px",
+            translateX: beamOptions.translateX || "0px",
+            rotate: beamOptions.rotate || 0,
+          },
+        }}
+        transition={{
+          duration: beamOptions.duration || 8,
+          repeat: Infinity,
+          repeatType: "loop",
+          ease: "linear",
+          delay: beamOptions.delay || 0,
+          repeatDelay: beamOptions.repeatDelay || 0,
+        }}
+        className={cn(
+          "absolute left-0 top-20 m-auto h-14 w-px rounded-full bg-gradient-to-t from-indigo-500 via-purple-500 to-transparent",
+          beamOptions.className
+        )} />
+      <AnimatePresence>
+        {collision.detected && collision.coordinates && (
+          <Explosion
+            key={`${collision.coordinates.x}-${collision.coordinates.y}`}
+            className=""
+            style={{
+              left: `${collision.coordinates.x}px`,
+              top: `${collision.coordinates.y}px`,
+              transform: "translate(-50%, -50%)",
+            }} />
+        )}
+      </AnimatePresence>
+    </>
+  );
+});
+
+CollisionMechanism.displayName = "CollisionMechanism";
+
+const Explosion = ({
+  ...props
+}) => {
+  const spans = Array.from({ length: 20 }, (_, index) => ({
+    id: index,
+    initialX: 0,
+    initialY: 0,
+    directionX: Math.floor(Math.random() * 80 - 40),
+    directionY: Math.floor(Math.random() * -50 - 10),
+  }));
+
+  return (
+    <div {...props} className={cn("absolute z-50 h-2 w-2", props.className)}>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 1.5, ease: "easeOut" }}
+        className="absolute -inset-x-10 top-0 m-auto h-2 w-10 rounded-full bg-gradient-to-r from-transparent via-indigo-500 to-transparent blur-sm"></motion.div>
+      {spans.map((span) => (
+        <motion.span
+          key={span.id}
+          initial={{ x: span.initialX, y: span.initialY, opacity: 1 }}
+          animate={{
+            x: span.directionX,
+            y: span.directionY,
+            opacity: 0,
+          }}
+          transition={{ duration: Math.random() * 1.5 + 0.5, ease: "easeOut" }}
+          className="absolute h-1 w-1 rounded-full bg-gradient-to-b from-indigo-500 to-purple-500" />
+      ))}
+    </div>
+  );
+};
+
+---
+in lib/utils.ts
+
+import { ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+
+
+BackgroundBeamsWithCollision
+Prop Name	Type	Description	Default
+children	React.ReactNode	The content to be rendered inside the component	Required
+className	string?	Additional CSS classes to be applied to the container	undefined
+CollisionMechanism
+Prop Name	Type	Description	Default
+containerRef	React.RefObject<HTMLDivElement>	Reference to the container element	Required
+parentRef	React.RefObject<HTMLDivElement>	Reference to the parent element	Required
+beamOptions	object	Configuration options for the beam
+
+beamOptions
+  Property	Type	Description	Default
+  initialX	number?	Initial X position of the beam	0
+  translateX	number?	X position to translate to	0
+  initialY	number?	Initial Y position of the beam	"-200px"
+  translateY	number?	Y position to translate to	"1800px"
+  rotate	number?	Rotation angle of the beam	0
+  className	string?	Additional CSS classes for the beam	undefined
+  duration	number?	Duration of the animation in seconds	8
+  delay	number?	Delay before the animation starts in seconds	0
+  repeatDelay	number?	Delay before the animation repeats in seconds	0
+
+
+---
+TS dots
+
+"use client";;
+import React, { useEffect, useRef, useState } from "react";
+
+/**
+ * Canvas-based dotted background that randomly glows and dims.
+ * - Uses a stable grid of dots.
+ * - Each dot gets its own phase + speed producing organic shimmering.
+ * - Handles high-DPI and resizes via ResizeObserver.
+ */
+export const DottedGlowBackground = ({
+  className,
+  gap = 12,
+  radius = 2,
+  color = "rgba(0,0,0,0.7)",
+  darkColor,
+  glowColor = "rgba(0, 170, 255, 0.85)",
+  darkGlowColor,
+  colorLightVar,
+  colorDarkVar,
+  glowColorLightVar,
+  glowColorDarkVar,
+  opacity = 0.6,
+  backgroundOpacity = 0,
+  speedMin = 0.4,
+  speedMax = 1.3,
+  speedScale = 1
+}) => {
+  const canvasRef = useRef(null);
+  const containerRef = useRef(null);
+  const [resolvedColor, setResolvedColor] = useState(color);
+  const [resolvedGlowColor, setResolvedGlowColor] = useState(glowColor);
+
+  // Resolve CSS variable value from the container or root
+  const resolveCssVariable = (el, variableName) => {
+    if (!variableName) return null;
+    const normalized = variableName.startsWith("--")
+      ? variableName
+      : `--${variableName}`;
+    const fromEl = getComputedStyle(el)
+      .getPropertyValue(normalized)
+      .trim();
+    if (fromEl) return fromEl;
+    const root = document.documentElement;
+    const fromRoot = getComputedStyle(root).getPropertyValue(normalized).trim();
+    return fromRoot || null;
+  };
+
+  const detectDarkMode = () => {
+    const root = document.documentElement;
+    if (root.classList.contains("dark")) return true;
+    if (root.classList.contains("light")) return false;
+    return (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
+  };
+
+  // Keep resolved colors in sync with theme changes and prop updates
+  useEffect(() => {
+    const container = containerRef.current ?? document.documentElement;
+
+    const compute = () => {
+      const isDark = detectDarkMode();
+
+      let nextColor = color;
+      let nextGlow = glowColor;
+
+      if (isDark) {
+        const varDot = resolveCssVariable(container, colorDarkVar);
+        const varGlow = resolveCssVariable(container, glowColorDarkVar);
+        nextColor = varDot || darkColor || nextColor;
+        nextGlow = varGlow || darkGlowColor || nextGlow;
+      } else {
+        const varDot = resolveCssVariable(container, colorLightVar);
+        const varGlow = resolveCssVariable(container, glowColorLightVar);
+        nextColor = varDot || nextColor;
+        nextGlow = varGlow || nextGlow;
+      }
+
+      setResolvedColor(nextColor);
+      setResolvedGlowColor(nextGlow);
+    };
+
+    compute();
+
+    const mql = window.matchMedia
+      ? window.matchMedia("(prefers-color-scheme: dark)")
+      : null;
+    const handleMql = () => compute();
+    mql?.addEventListener?.("change", handleMql);
+
+    const mo = new MutationObserver(() => compute());
+    mo.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class", "style"],
+    });
+
+    return () => {
+      mql?.removeEventListener?.("change", handleMql);
+      mo.disconnect();
+    };
+  }, [
+    color,
+    darkColor,
+    glowColor,
+    darkGlowColor,
+    colorLightVar,
+    colorDarkVar,
+    glowColorLightVar,
+    glowColorDarkVar,
+  ]);
+
+  useEffect(() => {
+    const el = canvasRef.current;
+    const container = containerRef.current;
+    if (!el || !container) return;
+
+    const ctx = el.getContext("2d");
+    if (!ctx) return;
+
+    let raf = 0;
+    let stopped = false;
+
+    const dpr = Math.max(1, window.devicePixelRatio || 1);
+
+    const resize = () => {
+      const { width, height } = container.getBoundingClientRect();
+      el.width = Math.max(1, Math.floor(width * dpr));
+      el.height = Math.max(1, Math.floor(height * dpr));
+      el.style.width = `${Math.floor(width)}px`;
+      el.style.height = `${Math.floor(height)}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+
+    const ro = new ResizeObserver(resize);
+    ro.observe(container);
+    resize();
+
+    // Precompute dot metadata for a medium-sized grid and regenerate on resize
+    let dots = [];
+
+    const regenDots = () => {
+      dots = [];
+      const { width, height } = container.getBoundingClientRect();
+      const cols = Math.ceil(width / gap) + 2;
+      const rows = Math.ceil(height / gap) + 2;
+      const min = Math.min(speedMin, speedMax);
+      const max = Math.max(speedMin, speedMax);
+      for (let i = -1; i < cols; i++) {
+        for (let j = -1; j < rows; j++) {
+          const x = i * gap + (j % 2 === 0 ? 0 : gap * 0.5); // offset every other row
+          const y = j * gap;
+          // Randomize phase and speed slightly per dot
+          const phase = Math.random() * Math.PI * 2;
+          const span = Math.max(max - min, 0);
+          const speed = min + Math.random() * span; // configurable rad/s
+          dots.push({ x, y, phase, speed });
+        }
+      }
+    };
+
+    const regenThrottled = () => {
+      regenDots();
+    };
+
+    regenDots();
+
+    let last = performance.now();
+
+    const draw = (now) => {
+      if (stopped) return;
+      const dt = (now - last) / 1000; // seconds
+      last = now;
+      const { width, height } = container.getBoundingClientRect();
+
+      ctx.clearRect(0, 0, el.width, el.height);
+      ctx.globalAlpha = opacity;
+
+      // optional subtle background fade for depth (defaults to 0 = transparent)
+      if (backgroundOpacity > 0) {
+        const grad = ctx.createRadialGradient(
+          width * 0.5,
+          height * 0.4,
+          Math.min(width, height) * 0.1,
+          width * 0.5,
+          height * 0.5,
+          Math.max(width, height) * 0.7
+        );
+        grad.addColorStop(0, "rgba(0,0,0,0)");
+        grad.addColorStop(1, `rgba(0,0,0,${Math.min(Math.max(backgroundOpacity, 0), 1)})`);
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, width, height);
+      }
+
+      // animate dots
+      ctx.save();
+      ctx.fillStyle = resolvedColor;
+
+      const time = (now / 1000) * Math.max(speedScale, 0);
+      for (let i = 0; i < dots.length; i++) {
+        const d = dots[i];
+        // Linear triangle wave 0..1..0 for linear glow/dim
+        const mod = (time * d.speed + d.phase) % 2;
+        const lin = mod < 1 ? mod : 2 - mod; // 0..1..0
+        const a = 0.25 + 0.55 * lin; // 0.25..0.8 linearly
+
+        // draw glow when bright
+        if (a > 0.6) {
+          const glow = (a - 0.6) / 0.4; // 0..1
+          ctx.shadowColor = resolvedGlowColor;
+          ctx.shadowBlur = 6 * glow;
+        } else {
+          ctx.shadowColor = "transparent";
+          ctx.shadowBlur = 0;
+        }
+
+        ctx.globalAlpha = a * opacity;
+        ctx.beginPath();
+        ctx.arc(d.x, d.y, radius, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+
+      raf = requestAnimationFrame(draw);
+    };
+
+    const handleResize = () => {
+      resize();
+      regenThrottled();
+    };
+
+    window.addEventListener("resize", handleResize);
+    raf = requestAnimationFrame(draw);
+
+    return () => {
+      stopped = true;
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", handleResize);
+      ro.disconnect();
+    };
+  }, [
+    gap,
+    radius,
+    resolvedColor,
+    resolvedGlowColor,
+    opacity,
+    backgroundOpacity,
+    speedMin,
+    speedMax,
+    speedScale,
+  ]);
+
+  return (
+    <div
+      ref={containerRef}
+      className={className}
+      style={{ position: "absolute", inset: 0 }}>
+      <canvas
+        ref={canvasRef}
+        style={{ display: "block", width: "100%", height: "100%" }} />
+    </div>
+  );
+};
+
+lib/utils.ts
+
+import { clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs) {
+  return twMerge(clsx(inputs));
+}
+
+
+// Dots
+
+"use client";
+import React, { useId, useMemo } from "react";
+import { useEffect, useState } from "react";
+import Particles, { initParticlesEngine } from "@tsparticles/react";
+import type { Container, SingleOrMultiple } from "@tsparticles/engine";
+import { loadSlim } from "@tsparticles/slim";
+import { cn } from "@/lib/utils";
+import { motion, useAnimation } from "motion/react";
+
+type ParticlesProps = {
+  id?: string;
+  className?: string;
+  background?: string;
+  particleSize?: number;
+  minSize?: number;
+  maxSize?: number;
+  speed?: number;
+  particleColor?: string;
+  particleDensity?: number;
+};
+export const SparklesCore = (props: ParticlesProps) => {
+  const {
+    id,
+    className,
+    background,
+    minSize,
+    maxSize,
+    speed,
+    particleColor,
+    particleDensity,
+  } = props;
+  const [init, setInit] = useState(false);
+  useEffect(() => {
+    initParticlesEngine(async (engine) => {
+      await loadSlim(engine);
+    }).then(() => {
+      setInit(true);
+    });
+  }, []);
+  const controls = useAnimation();
+
+  const particlesLoaded = async (container?: Container) => {
+    if (container) {
+      controls.start({
+        opacity: 1,
+        transition: {
+          duration: 1,
+        },
+      });
+    }
+  };
+
+  const generatedId = useId();
+  return (
+    <motion.div animate={controls} className={cn("opacity-0", className)}>
+      {init && (
+        <Particles
+          id={id || generatedId}
+          className={cn("h-full w-full")}
+          particlesLoaded={particlesLoaded}
+          options={{
+            background: {
+              color: {
+                value: background || "#0d47a1",
+              },
+            },
+            fullScreen: {
+              enable: false,
+              zIndex: 1,
+            },
+
+            fpsLimit: 120,
+            interactivity: {
+              events: {
+                onClick: {
+                  enable: true,
+                  mode: "push",
+                },
+                onHover: {
+                  enable: false,
+                  mode: "repulse",
+                },
+                resize: true as any,
+              },
+              modes: {
+                push: {
+                  quantity: 4,
+                },
+                repulse: {
+                  distance: 200,
+                  duration: 0.4,
+                },
+              },
+            },
+            particles: {
+              bounce: {
+                horizontal: {
+                  value: 1,
+                },
+                vertical: {
+                  value: 1,
+                },
+              },
+              collisions: {
+                absorb: {
+                  speed: 2,
+                },
+                bounce: {
+                  horizontal: {
+                    value: 1,
+                  },
+                  vertical: {
+                    value: 1,
+                  },
+                },
+                enable: false,
+                maxSpeed: 50,
+                mode: "bounce",
+                overlap: {
+                  enable: true,
+                  retries: 0,
+                },
+              },
+              color: {
+                value: particleColor || "#ffffff",
+                animation: {
+                  h: {
+                    count: 0,
+                    enable: false,
+                    speed: 1,
+                    decay: 0,
+                    delay: 0,
+                    sync: true,
+                    offset: 0,
+                  },
+                  s: {
+                    count: 0,
+                    enable: false,
+                    speed: 1,
+                    decay: 0,
+                    delay: 0,
+                    sync: true,
+                    offset: 0,
+                  },
+                  l: {
+                    count: 0,
+                    enable: false,
+                    speed: 1,
+                    decay: 0,
+                    delay: 0,
+                    sync: true,
+                    offset: 0,
+                  },
+                },
+              },
+              effect: {
+                close: true,
+                fill: true,
+                options: {},
+                type: {} as SingleOrMultiple<string> | undefined,
+              },
+              groups: {},
+              move: {
+                angle: {
+                  offset: 0,
+                  value: 90,
+                },
+                attract: {
+                  distance: 200,
+                  enable: false,
+                  rotate: {
+                    x: 3000,
+                    y: 3000,
+                  },
+                },
+                center: {
+                  x: 50,
+                  y: 50,
+                  mode: "percent",
+                  radius: 0,
+                },
+                decay: 0,
+                distance: {},
+                direction: "none",
+                drift: 0,
+                enable: true,
+                gravity: {
+                  acceleration: 9.81,
+                  enable: false,
+                  inverse: false,
+                  maxSpeed: 50,
+                },
+                path: {
+                  clamp: true,
+                  delay: {
+                    value: 0,
+                  },
+                  enable: false,
+                  options: {},
+                },
+                outModes: {
+                  default: "out",
+                },
+                random: false,
+                size: false,
+                speed: {
+                  min: 0.1,
+                  max: 1,
+                },
+                spin: {
+                  acceleration: 0,
+                  enable: false,
+                },
+                straight: false,
+                trail: {
+                  enable: false,
+                  length: 10,
+                  fill: {},
+                },
+                vibrate: false,
+                warp: false,
+              },
+              number: {
+                density: {
+                  enable: true,
+                  width: 400,
+                  height: 400,
+                },
+                limit: {
+                  mode: "delete",
+                  value: 0,
+                },
+                value: particleDensity || 120,
+              },
+              opacity: {
+                value: {
+                  min: 0.1,
+                  max: 1,
+                },
+                animation: {
+                  count: 0,
+                  enable: true,
+                  speed: speed || 4,
+                  decay: 0,
+                  delay: 0,
+                  sync: false,
+                  mode: "auto",
+                  startValue: "random",
+                  destroy: "none",
+                },
+              },
+              reduceDuplicates: false,
+              shadow: {
+                blur: 0,
+                color: {
+                  value: "#000",
+                },
+                enable: false,
+                offset: {
+                  x: 0,
+                  y: 0,
+                },
+              },
+              shape: {
+                close: true,
+                fill: true,
+                options: {},
+                type: "circle",
+              },
+              size: {
+                value: {
+                  min: minSize || 1,
+                  max: maxSize || 3,
+                },
+                animation: {
+                  count: 0,
+                  enable: false,
+                  speed: 5,
+                  decay: 0,
+                  delay: 0,
+                  sync: false,
+                  mode: "auto",
+                  startValue: "random",
+                  destroy: "none",
+                },
+              },
+              stroke: {
+                width: 0,
+              },
+              zIndex: {
+                value: 0,
+                opacityRate: 1,
+                sizeRate: 1,
+                velocityRate: 1,
+              },
+              destroy: {
+                bounds: {},
+                mode: "none",
+                split: {
+                  count: 1,
+                  factor: {
+                    value: 3,
+                  },
+                  rate: {
+                    value: {
+                      min: 4,
+                      max: 9,
+                    },
+                  },
+                  sizeOffset: true,
+                },
+              },
+              roll: {
+                darken: {
+                  enable: false,
+                  value: 0,
+                },
+                enable: false,
+                enlighten: {
+                  enable: false,
+                  value: 0,
+                },
+                mode: "vertical",
+                speed: 25,
+              },
+              tilt: {
+                value: 0,
+                animation: {
+                  enable: false,
+                  speed: 0,
+                  decay: 0,
+                  sync: false,
+                },
+                direction: "clockwise",
+                enable: false,
+              },
+              twinkle: {
+                lines: {
+                  enable: false,
+                  frequency: 0.05,
+                  opacity: 1,
+                },
+                particles: {
+                  enable: false,
+                  frequency: 0.05,
+                  opacity: 1,
+                },
+              },
+              wobble: {
+                distance: 5,
+                enable: false,
+                speed: {
+                  angle: 50,
+                  move: 10,
+                },
+              },
+              life: {
+                count: 0,
+                delay: {
+                  value: 0,
+                  sync: false,
+                },
+                duration: {
+                  value: 0,
+                  sync: false,
+                },
+              },
+              rotate: {
+                value: 0,
+                animation: {
+                  enable: false,
+                  speed: 0,
+                  decay: 0,
+                  sync: false,
+                },
+                direction: "clockwise",
+                path: false,
+              },
+              orbit: {
+                animation: {
+                  count: 0,
+                  enable: false,
+                  speed: 1,
+                  decay: 0,
+                  delay: 0,
+                  sync: false,
+                },
+                enable: false,
+                opacity: 1,
+                rotation: {
+                  value: 45,
+                },
+                width: 1,
+              },
+              links: {
+                blink: false,
+                color: {
+                  value: "#fff",
+                },
+                consent: false,
+                distance: 100,
+                enable: false,
+                frequency: 1,
+                opacity: 1,
+                shadow: {
+                  blur: 5,
+                  color: {
+                    value: "#000",
+                  },
+                  enable: false,
+                },
+                triangles: {
+                  enable: false,
+                  frequency: 1,
+                },
+                width: 1,
+                warp: false,
+              },
+              repulse: {
+                value: 0,
+                enabled: false,
+                distance: 1,
+                duration: 1,
+                factor: 1,
+                speed: 1,
+              },
+            },
+            detectRetina: true,
+          }}
+        />
+      )}
+    </motion.div>
+  );
+};
+
+lib/utils.ts
+
+import { ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+
+Props
+Prop name	Type	Description
+id	string	The id of the sparkles component.
+className	string	The class name of the sparkles component.
+background	string	The background color of the sparkles component.
+particleSize	number	The size of the particles in the sparkles component.
+minSize	number	The minimum size of the particles in the sparkles component.
+maxSize	number	The maximum size of the particles in the sparkles component.
+speed	number	The speed of the particles in the sparkles component.
+particleColor	string	The color of the particles in the sparkles component.
+particleDensity	number	The density of the particles in the sparkles component.
