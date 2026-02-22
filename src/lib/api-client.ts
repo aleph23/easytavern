@@ -239,6 +239,47 @@ export const apiClient = {
               throw new Error('Invalid response format from provider');
           }
       }
+      else if (provider.type === 'minimax') {
+          // MiniMax T2I
+          // Docs: https://platform.minimax.io/docs/api-reference/image-generation-t2i
+          const payload = {
+              model: provider.models?.[0] || 'image-01', // Default model if not specified
+              prompt,
+              size: `${width}x${height}`,
+              response_format: 'url' // MiniMax supports 'url' or 'b64_json' (if documented, assuming standard)
+          };
+
+          const response = await fetch(`${provider.baseUrl}/text_to_image`, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${provider.apiKey}`
+              },
+              body: JSON.stringify(payload)
+          });
+
+          if (!response.ok) {
+              const text = await response.text();
+              throw new Error(`MiniMax Error: ${response.status} - ${text}`);
+          }
+
+          // MiniMax response structure usually follows OpenAI but might differ slightly.
+          // Assuming standard response for now based on common practices, or we check docs.
+          // Docs say:
+          // { "created": 123, "data": [ { "url": "..." } ] }
+          const data = await response.json();
+
+          if (data.data?.[0]?.url) {
+              const imgRes = await fetch(data.data[0].url);
+              const blob = await imgRes.blob();
+              const base64 = await blobToBase64(blob);
+              result = { data: base64, format: 'base64' };
+          } else if (data.data?.[0]?.b64_json) {
+              result = { data: data.data[0].b64_json, format: 'base64' };
+          } else {
+               throw new Error('Invalid response format from MiniMax');
+          }
+      }
       else {
           throw new Error(`Provider type ${provider.type} not implemented`);
       }

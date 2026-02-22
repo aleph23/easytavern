@@ -115,6 +115,14 @@ const DEFAULT_IMAGE_PROVIDERS: ImageProvider[] = [
     baseUrl: 'https://chutes.ai/api/v1',
     apiKey: '',
     enabled: false,
+  },
+  {
+    id: 'minimax',
+    name: 'MiniMax',
+    type: 'minimax',
+    baseUrl: 'https://api.minimax.chat/v1',
+    apiKey: '',
+    enabled: false,
   }
 ];
 

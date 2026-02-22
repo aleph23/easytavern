@@ -3,7 +3,7 @@ export type ImageStyle = 'graphic_novel' | 'realistic_anime' | 'photorealism' | 
 export interface ImageProvider {
   id: string;
   name: string;
-  type: 'automatic1111' | 'comfyui' | 'openai' | 'pollinations' | 'chutes' | 'openrouter' | 'custom';
+  type: 'automatic1111' | 'comfyui' | 'openai' | 'pollinations' | 'chutes' | 'openrouter' | 'minimax' | 'custom';
   baseUrl: string;
   apiKey?: string;
   enabled: boolean;

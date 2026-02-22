@@ -60,7 +60,7 @@ export const ImageSettings = () => {
                     onChange={(e) => updateImageProvider(activeProvider.id, { baseUrl: e.target.value })}
                 />
             </div>
-            {(activeProvider.type === 'openai' || activeProvider.type === 'openrouter' || activeProvider.type === 'chutes') && (
+            {(activeProvider.type === 'openai' || activeProvider.type === 'openrouter' || activeProvider.type === 'chutes' || activeProvider.type === 'minimax') && (
                 <div className="space-y-2">
                     <Label>API Key</Label>
                     <Input
