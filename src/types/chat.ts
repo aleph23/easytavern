@@ -1,3 +1,5 @@
+import { ImageGenerationSettings } from './image-generation';
+
 export interface Message {
   id: string;
   role: 'user' | 'assistant' | 'system';
@@ -39,5 +41,6 @@ export interface ChatSettings {
 export interface AppSettings {
   providers: APIProvider[];
   chatSettings: ChatSettings;
+  imageGeneration: ImageGenerationSettings;
   activeCharacter?: Character;
 }

@@ -6,12 +6,15 @@ import { Sidebar } from '@/components/layout/Sidebar';
 import { ChatArea } from '@/components/chat/ChatArea';
 import { ChatInput } from '@/components/chat/ChatInput';
 import { SettingsPanel } from '@/components/settings/SettingsPanel';
-import { Character } from '@/types/chat';
+import { PortraitGenerator } from '@/components/chat/PortraitGenerator';
+import { Character, Message } from '@/types/chat';
 import { toast } from '@/hooks/use-toast';
+import { getChatFolder } from '@/lib/chat-persistence';
 
 const Index = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [portraitOpen, setPortraitOpen] = useState(false);
   const [activeCharacter, setActiveCharacter] = useState<Character | undefined>();
   
   const { 
@@ -21,7 +24,10 @@ const Index = () => {
     sendMessage, 
     clearMessages,
     deleteMessage,
-    editMessage 
+    editMessage,
+    startNewChat,
+    generateSceneImage,
+    setMessages
   } = useChat();
 
   const {
@@ -51,12 +57,58 @@ const Index = () => {
   const handleSelectCharacter = (character: Character) => {
     setActiveCharacter(character);
     updateChatSettings({ systemPrompt: character.systemPrompt });
+    startNewChat(character.name);
     setSidebarOpen(false);
+
+    if (character.greeting) {
+      setMessages([{
+        id: 'greeting',
+        role: 'assistant',
+        content: character.greeting,
+        timestamp: new Date()
+      }]);
+    }
+
+    if (settings.imageGeneration.enabled) {
+      const activeProvider = settings.providers.find(p => p.id === settings.chatSettings.activeProvider);
+      if (activeProvider) {
+        const context: Message[] = [
+          { id: 'start', role: 'system', content: `Start of scene. Character: ${character.name}. ${character.description}. ${character.greeting || ''}`, timestamp: new Date() }
+        ];
+        const folder = getChatFolder(character.name);
+        generateSceneImage(context, settings.chatSettings, activeProvider, settings.imageGeneration, undefined, folder);
+      }
+    }
   };
 
   const handleNewChat = () => {
-    clearMessages();
+    if (activeCharacter) {
+      startNewChat(activeCharacter.name);
+    } else {
+      clearMessages();
+    }
     setSidebarOpen(false);
+  };
+
+  const handleGeneratePortrait = async (target: 'user' | 'character', character?: Character) => {
+    const activeProvider = settings.providers.find(p => p.id === settings.chatSettings.activeProvider);
+    if (!activeProvider) {
+        toast({ title: "No active provider", variant: "destructive" });
+        return;
+    }
+
+    let context: Message[] = [];
+    if (target === 'character' && character) {
+        context = [
+            { id: '1', role: 'system', content: `Character Name: ${character.name}\nDescription: ${character.description}\n${character.systemPrompt}`, timestamp: new Date() }
+        ];
+    } else {
+        context = [
+            { id: '1', role: 'user', content: "Generate a portrait of the user.", timestamp: new Date() }
+        ];
+    }
+
+    await generateSceneImage(context, settings.chatSettings, activeProvider, settings.imageGeneration);
   };
 
   return (
@@ -73,7 +125,8 @@ const Index = () => {
       <div className="flex-1 flex flex-col min-w-0">
         <Header
           onOpenSettings={() => setSettingsOpen(true)}
-          onClearChat={clearMessages}
+          onClearChat={handleNewChat}
+          onOpenPortrait={() => setPortraitOpen(true)}
           onToggleSidebar={() => setSidebarOpen(true)}
           settings={settings.chatSettings}
           providers={settings.providers}
@@ -109,6 +162,13 @@ const Index = () => {
         onAddProvider={addProvider}
         onRemoveProvider={removeProvider}
         onReset={resetSettings}
+      />
+
+      <PortraitGenerator
+        isOpen={portraitOpen}
+        onClose={() => setPortraitOpen(false)}
+        activeCharacter={activeCharacter}
+        onGenerate={handleGeneratePortrait}
       />
     </div>
   );

@@ -324,7 +324,7 @@ in lib/utils.ts
 
 import { ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
- 
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -338,7 +338,7 @@ CollisionMechanism
 Prop Name	Type	Description	Default
 containerRef	React.RefObject<HTMLDivElement>	Reference to the container element	Required
 parentRef	React.RefObject<HTMLDivElement>	Reference to the parent element	Required
-beamOptions	object	Configuration options for the beam	
+beamOptions	object	Configuration options for the beam
 
 beamOptions
   Property	Type	Description	Default
@@ -1084,4 +1084,3 @@ maxSize	number	The maximum size of the particles in the sparkles component.
 speed	number	The speed of the particles in the sparkles component.
 particleColor	string	The color of the particles in the sparkles component.
 particleDensity	number	The density of the particles in the sparkles component.
-

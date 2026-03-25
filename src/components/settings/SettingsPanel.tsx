@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { X, Plus, Trash2, Check, Eye, EyeOff, RefreshCw } from 'lucide-react';
 import { AppSettings, APIProvider, ChatSettings } from '@/types/chat';
 import { cn } from '@/lib/utils';
+import { ImageSettings } from './ImageSettings';
 
 interface SettingsPanelProps {
   isOpen: boolean;
@@ -24,7 +25,7 @@ export const SettingsPanel = ({
   onRemoveProvider,
   onReset,
 }: SettingsPanelProps) => {
-  const [activeTab, setActiveTab] = useState<'providers' | 'chat' | 'tts' | 'memory'>('providers');
+  const [activeTab, setActiveTab] = useState<'providers' | 'chat' | 'image' | 'tts' | 'memory'>('providers');
   const [showApiKeys, setShowApiKeys] = useState<Record<string, boolean>>({});
 
   if (!isOpen) return null;
@@ -35,6 +36,7 @@ export const SettingsPanel = ({
   const tabs = [
     { id: 'providers', label: 'API Providers' },
     { id: 'chat', label: 'Chat Settings' },
+    { id: 'image', label: 'Image Generation' },
     { id: 'tts', label: 'TTS (Kokoro)' },
     { id: 'memory', label: 'Memory' },
   ] as const;
@@ -167,6 +169,10 @@ export const SettingsPanel = ({
                 Add Custom Provider
               </button>
             </div>
+          )}
+
+          {activeTab === 'image' && (
+            <ImageSettings />
           )}
 
           {activeTab === 'chat' && (

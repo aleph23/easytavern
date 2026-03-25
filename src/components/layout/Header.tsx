@@ -1,10 +1,12 @@
-import { Settings, Trash2, Menu, Zap, Users } from 'lucide-react';
+import { Settings, Trash2, Menu, Zap, Users, Camera } from 'lucide-react';
 import { ChatSettings, APIProvider } from '@/types/chat';
 import { cn } from '@/lib/utils';
+import { DebugPanel } from '@/components/debug/DebugPanel';
 
 interface HeaderProps {
   onOpenSettings: () => void;
   onClearChat: () => void;
+  onOpenPortrait: () => void;
   onToggleSidebar?: () => void;
   settings: ChatSettings;
   providers: APIProvider[];
@@ -13,6 +15,7 @@ interface HeaderProps {
 export const Header = ({ 
   onOpenSettings, 
   onClearChat, 
+  onOpenPortrait,
   onToggleSidebar,
   settings,
   providers 
@@ -51,6 +54,16 @@ export const Header = ({
               <span className="text-foreground font-mono text-xs">{settings.activeModel}</span>
             </div>
           )}
+
+          <DebugPanel />
+
+          <button
+            onClick={onOpenPortrait}
+            className="p-2 text-muted-foreground hover:text-foreground hover:bg-secondary rounded-lg transition-colors"
+            title="Generate Portrait"
+          >
+            <Camera className="w-5 h-5" />
+          </button>
 
           <button
             onClick={onClearChat}

@@ -6,13 +6,12 @@ The codebase is a modern React + TypeScript application using Vite, shadcn/ui co
 
 ## Approach
 
-The implementation will transform EasyTavern into a feature-rich, tab-based desktop application compatible with SillyTavern extensions. The approach prioritizes: 
-(1) Electron integration for desktop deployment, 
-(2) tab-based architecture to declutter the main interface, 
-(3) Compatible with all SillyTavern extensions, 
-(4) enhance backend connectivity with streaming support, 
+The implementation will transform EasyTavern into a feature-rich, tab-based desktop application compatible with SillyTavern extensions. The approach prioritizes:
+(1) Electron integration for desktop deployment,
+(3) Compatible with all SillyTavern extensions,
+(4) enhance backend connectivity with streaming support,
 (5) modular extension system,
-(6) Add Aceternity and Framer Motion for elegant backgrounds. 
+(6) Add Aceternity and Framer Motion for elegant backgrounds.
 
 ## Implementation Plan
 
@@ -46,7 +45,6 @@ The implementation will transform EasyTavern into a feature-rich, tab-based desk
   - Component Library: shadcn/ui & GlassUI
   - Backgrounds from AceternityUI (user selectable (Vortex / Aurora / Gradient Ani ) or static)
   - UI Animations: Framer Motion
-  
 - Tabbed menu will be hidden behind either GlassUI's drawer that will pull down from the top OR AceternityUI's 'floating-navbar'
 - Dialog column will be on a variable transparency GlassUI object.
 - This will be a portable app and all config files should be externalized to the executable directory for easy customization (with defaults hardcoded incase something goes wrong)
@@ -222,24 +220,24 @@ graph TD
     D --> E2[Character Editor Tab]
     D --> E3[Settings Tab]
     D --> E4[Extensions Tab]
-    D --> E5[World Info Tab]
     
+    D --> E5[World Info Tab]
     E1 --> F[Chat Hook]
     F --> G[Backend Connector]
     G --> H1[Text Inference APIs]
     G --> H2[Image Generation APIs]
-    
+
     E1 --> I[Extension Runtime]
     I --> J[Extension Loader]
     J --> K[Extension Event Bus]
-    
+
     E2 --> L[Character Manager]
     L --> M[Character Parser/Exporter]
     M --> N[File System via IPC]
-    
+
     E5 --> O[World Info Manager]
     O --> F
-    
+
     C --> P[Dexie.js Storage]
     C --> Q[Settings Manager]
     Q --> N
@@ -254,8 +252,8 @@ sequenceDiagram
     participant C as Chat Hook
     participant E as Extension System
     participant B as Backend API
-    participant S as Storage
     
+    participant S as Storage
     U->>T: Open new chat tab
     T->>C: Initialize chat state
     U->>C: Send message

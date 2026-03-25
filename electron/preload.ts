@@ -4,7 +4,9 @@ contextBridge.exposeInMainWorld('electron', {
   // File System
   fs: {
     readFile: (filePath: string) => ipcRenderer.invoke('fs:readFile', filePath),
-    writeFile: (filePath: string, content: string) => ipcRenderer.invoke('fs:writeFile', filePath, content),
+    writeFile: (filePath: string, content: string | Buffer) => ipcRenderer.invoke('fs:writeFile', filePath, content),
+    createDir: (dirPath: string) => ipcRenderer.invoke('fs:createDir', dirPath),
+    exists: (filePath: string) => ipcRenderer.invoke('fs:exists', filePath),
     readDir: (dirPath: string) => ipcRenderer.invoke('fs:readDir', dirPath),
     deleteFile: (filePath: string) => ipcRenderer.invoke('fs:deleteFile', filePath),
   },

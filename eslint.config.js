@@ -8,13 +8,13 @@ import css from "@eslint/css";
 import { defineConfig } from "eslint/config";
 
 export default defineConfig([
-  { files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"], 
-    plugins: { js }, 
-    extends: ["js/recommended"], 
-    languageOptions: { 
+  { files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
+    plugins: { js },
+    extends: ["js/recommended"],
+    languageOptions: {
       globals: {
-        ...globals.browser, 
-        ...globals.node} } 
+        ...globals.browser,
+        ...globals.node} }
       },
   tseslint.configs.recommended,
   pluginReact.configs.flat.recommended,
