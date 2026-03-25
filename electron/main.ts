@@ -1,6 +1,6 @@
-import { app, BrowserWindow, ipcMain, dialog, Menu } from 'electron';
-import path from 'path';
+import { app, BrowserWindow, dialog, ipcMain, Menu } from 'electron';
 import fs from 'fs/promises';
+import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -220,15 +220,13 @@ ipcMain.handle('fs:deleteFile', async (_event, filePath: string) => {
 
 // Dialog operations
 ipcMain.handle('dialog:openFile', async (_event, options) => {
-  const result = await dialog.showOpenDialog(options);
-  return result;
+  return await dialog.showOpenDialog(options);
 });
 
 ipcMain.handle('dialog:saveFile', async (_event, options) => {
   const result = await dialog.showSaveDialog(options);
-  return result;
-});
-
+  return await dialog.showSaveDialog(options);
+};
 // App data path
 ipcMain.handle('app:getDataPath', async () => {
   return getAppDataPath();

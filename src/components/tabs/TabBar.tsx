@@ -14,11 +14,11 @@ interface TabBarProps {
 
 const getIconForType = (type: Tab['type']) => {
   switch (type) {
-    case 'chat': return <MessageSquare className="w-4 h-4" />;
+    case 'chats': return <MessageSquare className="w-4 h-4" />;
     case 'settings': return <Settings className="w-4 h-4" />;
-    case 'character': return <User className="w-4 h-4" />;
+    case 'characters': return <User className="w-4 h-4" />;
     case 'extensions': return <Box className="w-4 h-4" />;
-    case 'world-info': return <Globe className="w-4 h-4" />;
+    case 'worlds': return <Globe className="w-4 h-4" />;
     default: return <MessageSquare className="w-4 h-4" />;
   }
 };

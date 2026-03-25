@@ -1,4 +1,4 @@
-export type TabType = 'chat' | 'character' | 'settings' | 'extensions' | 'world-info';
+export type TabType = 'chats' | 'characters' | 'settings' | 'extensions' | 'worlds';
 
 export interface Tab {
   id: string;

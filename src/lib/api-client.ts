@@ -64,7 +64,7 @@ export const apiClient = {
     }
 
     try {
-      const response = await fetch(`${provider.baseUrl}/chat/completions`, {
+      const response = await fetch(`${provider.baseUrl}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -212,7 +212,7 @@ export const apiClient = {
              headers['X-Title'] = 'EasyTavern';
           }
 
-          const response = await fetch(`${provider.baseUrl}/images/generations`, {
+          const response = await fetch(`${provider.baseUrl}`, {
               method: 'POST',
               headers,
               body: JSON.stringify(payload)

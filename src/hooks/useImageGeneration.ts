@@ -22,7 +22,7 @@ export const useImageGeneration = () => {
 
   const generate = useCallback(async (prompt: string) => {
     const imgSettings = settings.imageGeneration;
-    // Even if enabled is false in settings, we might want to force generate manually? No.
+    // Even if enabled is false in settings, we might want to force generate manually? No!
     // But for inline/auto generation, we check enabled.
     // The hook provides the capability. The caller decides policy?
     // Let's assume this function just generates.

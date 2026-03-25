@@ -156,13 +156,6 @@ export const Sidebar = ({
 
         <div className="p-4 border-t border-sidebar-border">
           <div className="flex items-center gap-3 p-2 rounded-lg bg-sidebar-accent">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-              <MessageSquare className="w-4 h-4 text-white" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium truncate">Local Mode</p>
-              <p className="text-xs text-muted-foreground">All data stays on device</p>
-            </div>
           </div>
         </div>
       </aside>

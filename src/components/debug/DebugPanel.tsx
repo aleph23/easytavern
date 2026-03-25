@@ -1,12 +1,6 @@
 import { Bug, Trash2, ChevronDown, ChevronRight } from 'lucide-react';
 import { useDebugLog, LogEntry } from '@/contexts/DebugContext';
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useState } from 'react';

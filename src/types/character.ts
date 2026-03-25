@@ -11,30 +11,31 @@ export interface CharacterAsset {
 
 // Character Book Entry (lorebook/world info entry)
 export interface CharacterBookEntry {
-  keys: string[];
+  keys: string[];   // defauly null array
   content: string;
   extensions: Record<string, unknown>;
-  enabled: boolean;
-  insertion_order: number;
-  case_sensitive?: boolean;
-  use_regex: boolean;
-  constant?: boolean;
+  enabled: boolean;  // default true
+  insertion_order: number;  //Default 10
+  case_sensitive?: boolean; // default false
+  use_regex: boolean;  // default false
+  constant?: boolean;  // default false
   name?: string;
-  priority?: number;
+  priority?: number;   //Default 100
   id?: number;
   comment?: string;
-  selective?: boolean;
-  secondary_keys?: string[];
-  position?: 'before_char' | 'after_char';
+  selective?: boolean;  // default true
+  secondary_keys?: string[];  // defauly null array
+  position?: 'before_char' | 'after_char';   // Default 'after_char'
 }
 
 // Character Book (lorebook/world info collection)
+// If the characterbook is used, Chub.ai wants all fields initialized (null is OK)
 export interface CharacterBook {
   name?: string;
   description?: string;
-  scan_depth?: number;
-  token_budget?: number;
-  recursive_scanning?: boolean;
+  scan_depth?: number; //Defaukt 2
+  token_budget?: number; // Default 1024
+  recursive_scanning?: boolean;  // default false
   extensions: Record<string, unknown>;
   entries: CharacterBookEntry[];
 }
@@ -43,7 +44,7 @@ export interface CharacterBook {
 export interface CharacterCardV3Data {
   name: string;
   description: string;
-  tags: string[];
+  tags: string[]; // defauly null array
   creator: string;
   character_version: string;
   mes_example: string;
@@ -51,10 +52,10 @@ export interface CharacterCardV3Data {
   system_prompt: string;
   post_history_instructions: string;
   first_mes: string;
-  alternate_greetings: string[];
+  alternate_greetings: string[]; // defauly null array
   personality: string;
   scenario: string;
-  creator_notes: string;
+  creator_notes: string;  
   character_book?: CharacterBook;
   
   // V3 specific fields
@@ -63,8 +64,8 @@ export interface CharacterCardV3Data {
   creator_notes_multilingual?: Record<string, string>;
   source?: string[];
   group_only_greetings?: string[];
-  creation_date?: string;
-  modification_date?: string;
+  creation_date?: string;  // Unix time as string.  This fiekd is intended to be a write-once read-only field
+  modification_date?: string;  // Unix time as string
 }
 
 // Full V3 Character Card

@@ -9,7 +9,7 @@ const DEFAULT_PROVIDERS: APIProvider[] = [
     name: 'Ollama',
     type: 'ollama',
     baseUrl: 'http://localhost:11434/v1',
-    models: ['llama3.2', 'mistral', 'codellama', 'llama2'],
+    models: ['local'],
     enabled: true,
   },
   {
@@ -36,7 +36,7 @@ const DEFAULT_PROVIDERS: APIProvider[] = [
     type: 'openrouter',
     baseUrl: 'https://openrouter.ai/api/v1',
     apiKey: '',
-    models: ['anthropic/claude-3.5-sonnet', 'openai/gpt-4o', 'google/gemini-pro'],
+    models: ['anthropic/claude-4.6-sonnet', 'openai/gpt-5.2', 'google/gemini-v3.1-pro'],
     enabled: false,
   },
   {
@@ -45,7 +45,7 @@ const DEFAULT_PROVIDERS: APIProvider[] = [
     type: 'custom',
     baseUrl: 'https://api.deepseek.com/v1',
     apiKey: '',
-    models: ['deepseek-chat', 'deepseek-coder'],
+    models: ['deepseek-chat-v3.1', 'deepseek-coder'],
     enabled: false,
   },
   {
@@ -53,7 +53,7 @@ const DEFAULT_PROVIDERS: APIProvider[] = [
     name: 'KoboldCpp',
     type: 'koboldcpp',
     baseUrl: 'http://localhost:5001/v1',
-    models: ['local-model'],
+    models: ['local'],
     enabled: false,
   },
   {
@@ -61,7 +61,7 @@ const DEFAULT_PROVIDERS: APIProvider[] = [
     name: 'LlamaCpp',
     type: 'llamacpp',
     baseUrl: 'http://localhost:8080/v1',
-    models: ['local-model'],
+    models: ['local'],
     enabled: false,
   },
 ];
@@ -70,11 +70,11 @@ const DEFAULT_CHAT_SETTINGS: ChatSettings = {
   activeProvider: 'ollama',
   activeModel: 'llama3.2',
   temperature: 0.7,
-  maxTokens: 2048,
+  maxTokens: 600,
   topP: 0.9,
-  frequencyPenalty: 0,
+  frequencyPenalty: 0.02,
   presencePenalty: 0,
-  systemPrompt: 'You are a helpful assistant.',
+  systemPrompt: '',
 };
 
 const DEFAULT_IMAGE_PROVIDERS: ImageProvider[] = [
@@ -83,7 +83,7 @@ const DEFAULT_IMAGE_PROVIDERS: ImageProvider[] = [
     name: 'Automatic1111',
     type: 'automatic1111',
     baseUrl: 'http://localhost:7860',
-    enabled: true,
+    enabled: false,
   },
   {
     id: 'openai',
@@ -98,6 +98,7 @@ const DEFAULT_IMAGE_PROVIDERS: ImageProvider[] = [
     name: 'Pollinations.ai',
     type: 'pollinations',
     baseUrl: 'https://image.pollinations.ai',
+    aoiKey: '',
     enabled: false,
   },
   {
@@ -112,7 +113,7 @@ const DEFAULT_IMAGE_PROVIDERS: ImageProvider[] = [
     id: 'chutes',
     name: 'Chutes.ai',
     type: 'chutes',
-    baseUrl: 'https://chutes.ai/api/v1',
+    baseUrl: 'https://medium.chutes.ai',
     apiKey: '',
     enabled: false,
   },
@@ -131,7 +132,7 @@ const DEFAULT_IMAGE_SETTINGS: ImageGenerationSettings = {
   activeProvider: 'automatic1111',
   generationFrequency: 0,
   style: 'graphic_novel',
-  negativePrompt: 'blurry, low quality, distorted, ugly, bad anatomy',
+  negativePrompt: 'blurry, low quality, text, signature, watermark, distorted, ugly, bad anatomy',
   providers: DEFAULT_IMAGE_PROVIDERS,
 };
 

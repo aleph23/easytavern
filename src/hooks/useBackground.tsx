@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useCallback, ReactNode } from 'react';
 
-export type BackgroundType = 'none' | 'dotted-glow' | 'beams' | 'image';
+export type BackgroundType = 'color' | 'dotted-matrix' | 'rain' | 'image';
 
 export interface BackgroundSettings {
   type: BackgroundType;
@@ -20,7 +20,7 @@ const loadBackground = (): BackgroundSettings => {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) return JSON.parse(stored);
   } catch {}
-  return { type: 'dotted-glow' };
+  return { type: 'dotted-matrix' };
 };
 
 const BackgroundContext = createContext<BackgroundContextValue | null>(null);

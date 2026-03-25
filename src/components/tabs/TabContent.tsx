@@ -16,7 +16,7 @@ export const TabContent: React.FC<TabContentProps> = ({ tab, isActive }) => {
         isActive ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
       )}
     >
-      {tab.type === 'chat' ? (
+      {tab.type === 'chats' ? (
         <Index />
       ) : (
         <div className="flex items-center justify-center h-full text-muted-foreground">

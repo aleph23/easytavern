@@ -4,40 +4,52 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
-@custom-variant dark (&:is(.dark *));
+/* eslint-disable-next-line */
+@custom-variant dark &:is(.dark *);
 
 @layer base {
   :root {
-    --radius: 0rem;
-    --primary: #970097;
+    --radius: 2rem;
+    --primary: #580058;
     --primary-foreground: #fff4f4;
-    --background: #110011;
+    --background: #1f001f;
     --foreground: #ffeaff;
     --card: #011318;
     --card-foreground: #ffceff;
     --popover: #023444;
     --popover-foreground: #ffa6ff;
-    --secondary: #00ffff;
-    --secondary-foreground: #ff3cff;
+    --secondary: hsl(308, 100%, 11%);
+    --secondary-foreground: hsl(34, 100%, 62%);
     --muted: #55aaa6;
     --muted-foreground: #b87ac0;
     --accent: #0000ff;
     --accent-foreground: #ff3cff;
     --destructive: oklch(0.6 0.2 20);
-    --destructive-foreground: #00ffff;
+    --destructive-foreground: hsl(59, 100%, 62%);
     --border: #ff3cff;
     --input: #3786fb;
-    --ring: #d000e1;
-    
+    --ring: hsl(187, 100%, 65%);
+
     /* Glass effect variables - Enhanced with gradient tint and border glow */
-    --glass-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.25) 50%, rgba(240, 248, 255, 0.3) 100%);
-    --glass-border: rgba(255, 0 , 255, 0.8);
-    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(255, 255, 255, 0.1) inset, 0 0 20px rgba(255, 255, 255, 0.05);
-    --glass-shadow-lg: 0 12px 48px rgba(0, 0, 0, 0.18), 0 4px 16px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.15) inset, 0 0 30px rgba(255, 255, 255, 0.08);
-    --glass-shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(255, 255, 255, 0.08) inset, 0 0 10px rgba(255, 255, 255, 0.03);
+    --glass-bg: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.4) 0%,
+      rgba(255, 255, 255, 0.25) 50%,
+      rgba(240, 248, 255, 0.3) 100%
+    );
+    --glass-border: rgba(255, 0, 255, 0.8);
+    --glass-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+      0 0 20px rgba(255, 255, 255, 0.05);
+    --glass-shadow-lg:
+      0 12px 48px rgba(0, 0, 0, 0.18), 0 4px 16px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.15) inset,
+      0 0 30px rgba(255, 255, 255, 0.08);
+    --glass-shadow-sm:
+      0 4px 16px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(255, 255, 255, 0.08) inset,
+      0 0 10px rgba(255, 255, 255, 0.03);
     --blur: 12px;
-    --blur-sm: 2px;
-    --blur-lg: 32px;
+    --blur-sm: 4px;
+    --blur-lg: 24px;
   }
 
   * {
@@ -56,7 +68,7 @@
 
 @layer components {
   .glass-panel {
-    background-color: hsl(var(--card) / 0.8);
+    background-color: hsl(var(--card) / 0.2);
     backdrop-filter: blur(12px);
     border-width: 1px;
     border-color: hsl(var(--border));
@@ -103,7 +115,7 @@
 
 @layer utilities {
   .text-gradient {
-    @apply bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent;
   }
 }
 
@@ -150,25 +162,25 @@
 
 :root {
   --radius: 2rem;
-  --primary: #970097;
+  --primary: #580058;
   --primary-foreground: #fff4f4;
-  --background: #110011;
+  --background: #1f001f;
   --foreground: #ffeaff;
   --card: #011318;
   --card-foreground: #ffceff;
   --popover: #023444;
   --popover-foreground: #ffa6ff;
-  --secondary: #00ffff;
-  --secondary-foreground: #ff3cff;
+  --secondary: hsl(308, 100%, 11%);
+  --secondary-foreground: hsl(34, 100%, 62%);
   --muted: #55aaa6;
   --muted-foreground: #b87ac0;
   --accent: #0000ff;
   --accent-foreground: #ff3cff;
   --destructive: oklch(0.6 0.2 20);
-  --destructive-foreground: #00ffff;
+  --destructive-foreground: hsl(59, 100%, 62%);
   --border: #ff3cff;
   --input: #3786fb;
-  --ring: #d000e1;
+  --ring: hsl(187, 100%, 65%);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -186,25 +198,25 @@
 
 .dark {
   --radius: 2rem;
-  --primary: #970097;
+  --primary: #580058;
   --primary-foreground: #fff4f4;
-  --background: #110011;
+  --background: #1f001f;
   --foreground: #ffeaff;
   --card: #011318;
   --card-foreground: #ffceff;
   --popover: #023444;
   --popover-foreground: #ffa6ff;
-  --secondary: #00ffff;
-  --secondary-foreground: #ff3cff;
+  --secondary: hsl(308, 100%, 11%);
+  --secondary-foreground: hsl(34, 100%, 62%);
   --muted: #55aaa6;
   --muted-foreground: #b87ac0;
   --accent: #0000ff;
   --accent-foreground: #ff3cff;
   --destructive: oklch(0.6 0.2 20);
-  --destructive-foreground: #00ffff;
+  --destructive-foreground: hsl(59, 100%, 62%);
   --border: #ff3cff;
   --input: #3786fb;
-  --ring: #d000e1;
+  --ring: hsl(187, 100%, 65%);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);

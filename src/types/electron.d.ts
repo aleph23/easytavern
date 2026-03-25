@@ -3,7 +3,7 @@ export interface IElectronAPI {
     readFile: (filePath: string) => Promise<{ success: boolean; data?: string | Buffer; error?: string }>;
     writeFile: (filePath: string, content: string | Buffer) => Promise<{ success: boolean; error?: string }>;
     readDir: (dirPath: string) => Promise<{ success: boolean; data?: string[]; error?: string }>;
-    deleteFile: (filePath: string) => Promise<{ success: boolean; error?: string }>;
+    // deleteFile: (filePath: string) => Promise<{ success: boolean; error?: string }>;
     createDir: (dirPath: string) => Promise<{ success: boolean; error?: string }>;
     exists: (filePath: string) => Promise<{ success: boolean; exists: boolean; error?: string }>;
   };
@@ -25,9 +25,10 @@ export interface IElectronAPI {
   };
   character: {
     list: () => Promise<{ success: boolean; data?: string[]; error?: string }>;
-    read: (filename: string) => Promise<{ success: boolean; data?: string | Buffer; type: 'string' | 'buffer'; error?: string }>;
+    read: (filename: string) => Promise<{ success: boolean; data?: string | Buffer; 
+    type: 'string' | 'buffer'; error?: string }>;
     write: (filename: string, content: string | Buffer) => Promise<{ success: boolean; error?: string }>;
-    delete: (filename: string) => Promise<{ success: boolean; error?: string }>;
+    // delete: (filename: string) => Promise<{ success: boolean; error?: string }>;
   };
   onNewChat: (callback: () => void) => () => void;
   onImportCharacter: (callback: (filePath: string) => void) => () => void;
