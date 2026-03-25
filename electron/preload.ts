@@ -1,4 +1,4 @@
-import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
+import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron'
 
 contextBridge.exposeInMainWorld('electron', {
   // File System
@@ -42,13 +42,13 @@ contextBridge.exposeInMainWorld('electron', {
 
   // Events
   onNewChat: (callback: () => void) => {
-    const subscription = (_event: IpcRendererEvent) => callback();
-    ipcRenderer.on('menu-new-chat', subscription);
-    return () => ipcRenderer.removeListener('menu-new-chat', subscription);
+    const subscription = (_event: IpcRendererEvent) => callback()
+    ipcRenderer.on('menu-new-chat', subscription)
+    return () => ipcRenderer.removeListener('menu-new-chat', subscription)
   },
   onImportCharacter: (callback: (filePath: string) => void) => {
-    const subscription = (_event: IpcRendererEvent, filePath: string) => callback(filePath);
-    ipcRenderer.on('menu-import-character', subscription);
-    return () => ipcRenderer.removeListener('menu-import-character', subscription);
+    const subscription = (_event: IpcRendererEvent, filePath: string) => callback(filePath)
+    ipcRenderer.on('menu-import-character', subscription)
+    return () => ipcRenderer.removeListener('menu-import-character', subscription)
   },
-});
+})

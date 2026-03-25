@@ -1,37 +1,35 @@
-import { app, BrowserWindow, dialog, ipcMain, Menu } from 'electron';
-import fs from 'fs/promises';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import { app, BrowserWindow, dialog, ipcMain, Menu } from 'electron'
+import fs from 'fs/promises'
+import path from 'path'
+import { fileURLToPath } from 'url'
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 // Determine if running in development mode
-const isDev = process.env.NODE_ENV === 'development';
+const isDev = process.env.NODE_ENV === 'development'
 
 // Store reference to main window
-let mainWindow: BrowserWindow | null = null;
+let mainWindow: BrowserWindow | null = null
 
 // Get app data directory for settings and chat storage
 const getAppDataPath = () => {
-  return isDev
-    ? path.join(process.cwd(), 'dev-data')
-    : path.join(app.getPath('userData'), 'data');
-};
+  return isDev ? path.join(process.cwd(), 'dev-data') : path.join(app.getPath('userData'), 'data')
+}
 
 // Ensure app data directory exists
 const ensureDataDirectory = async () => {
-  const dataPath = getAppDataPath();
+  const dataPath = getAppDataPath()
   try {
-    await fs.mkdir(dataPath, { recursive: true });
-    await fs.mkdir(path.join(dataPath, 'characters'), { recursive: true });
-    await fs.mkdir(path.join(dataPath, 'chats'), { recursive: true });
-    await fs.mkdir(path.join(dataPath, 'extensions'), { recursive: true });
-    await fs.mkdir(path.join(dataPath, 'settings'), { recursive: true });
+    await fs.mkdir(dataPath, { recursive: true })
+    await fs.mkdir(path.join(dataPath, 'characters'), { recursive: true })
+    await fs.mkdir(path.join(dataPath, 'chats'), { recursive: true })
+    await fs.mkdir(path.join(dataPath, 'extensions'), { recursive: true })
+    await fs.mkdir(path.join(dataPath, 'settings'), { recursive: true })
   } catch (error) {
-    console.error('Failed to create data directories:', error);
+    console.error('Failed to create data directories:', error)
   }
-};
+}
 
 const createWindow = () => {
   mainWindow = new BrowserWindow({
@@ -46,31 +44,31 @@ const createWindow = () => {
       sandbox: false, // Required for some IPC operations
     },
     title: 'EasyTavern',
-    backgroundColor: '#1a1a1a',
+    backgroundColor: '#100010',
     show: false, // Show after ready-to-show event
-  });
+  })
 
   // Show window when ready
   mainWindow.once('ready-to-show', () => {
-    mainWindow?.show();
-  });
+    mainWindow?.show()
+  })
 
   // Load the app
   if (isDev) {
-    mainWindow.loadURL('http://localhost:8080');
-    mainWindow.webContents.openDevTools();
+    mainWindow.loadURL('http://localhost:6090')
+    mainWindow.webContents.openDevTools()
   } else {
-    mainWindow.loadFile(path.join(__dirname, '../dist/index.html'));
+    mainWindow.loadFile(path.join(__dirname, '../dist/index.html'))
   }
 
   // Handle window closed
   mainWindow.on('closed', () => {
-    mainWindow = null;
-  });
+    mainWindow = null
+  })
 
   // Create application menu
-  createMenu();
-};
+  createMenu()
+}
 
 const createMenu = () => {
   const template: Electron.MenuItemConstructorOptions[] = [
@@ -81,7 +79,7 @@ const createMenu = () => {
           label: 'New Chat',
           accelerator: 'CmdOrCtrl+N',
           click: () => {
-            mainWindow?.webContents.send('menu-new-chat');
+            mainWindow?.webContents.send('menu-new-chat')
           },
         },
         { type: 'separator' },
@@ -94,9 +92,9 @@ const createMenu = () => {
                 { name: 'Character Cards', extensions: ['png', 'json'] },
                 { name: 'All Files', extensions: ['*'] },
               ],
-            });
+            })
             if (!result.canceled && result.filePaths.length > 0) {
-              mainWindow?.webContents.send('menu-import-character', result.filePaths[0]);
+              mainWindow?.webContents.send('menu-import-character', result.filePaths[0])
             }
           },
         },
@@ -130,179 +128,173 @@ const createMenu = () => {
         { role: 'togglefullscreen' },
       ],
     },
-    {
-      label: 'Window',
-      submenu: [
-        { role: 'minimize' },
-        { role: 'zoom' },
-      ],
-    },
-  ];
+    { label: 'Window', submenu: [{ role: 'minimize' }, { role: 'zoom' }] },
+  ]
 
-  const menu = Menu.buildFromTemplate(template);
-  Menu.setApplicationMenu(menu);
-};
+  const menu = Menu.buildFromTemplate(template)
+  Menu.setApplicationMenu(menu)
+}
 
 // App lifecycle events
 app.whenReady().then(async () => {
-  await ensureDataDirectory();
-  createWindow();
+  await ensureDataDirectory()
+  createWindow()
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow();
+      createWindow()
     }
-  });
-});
+  })
+})
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
-    app.quit();
+    app.quit()
   }
-});
+})
 
 // IPC Handlers
 
 // File system operations
 ipcMain.handle('fs:readFile', async (_event, filePath: string) => {
   try {
-    const content = await fs.readFile(filePath, 'utf-8');
-    return { success: true, data: content };
+    const content = await fs.readFile(filePath, 'utf-8')
+    return { success: true, data: content }
   } catch (error) {
-    return { success: false, error: (error as Error).message };
+    return { success: false, error: (error as Error).message }
   }
-});
+})
 
 ipcMain.handle('fs:writeFile', async (_event, filePath: string, content: string | Buffer) => {
   try {
-    await fs.writeFile(filePath, content);
-    return { success: true };
+    await fs.writeFile(filePath, content)
+    return { success: true }
   } catch (error) {
-    return { success: false, error: (error as Error).message };
+    return { success: false, error: (error as Error).message }
   }
-});
+})
 
 ipcMain.handle('fs:createDir', async (_event, dirPath: string) => {
   try {
-    await fs.mkdir(dirPath, { recursive: true });
-    return { success: true };
+    await fs.mkdir(dirPath, { recursive: true })
+    return { success: true }
   } catch (error) {
-    return { success: false, error: (error as Error).message };
+    return { success: false, error: (error as Error).message }
   }
-});
+})
 
 ipcMain.handle('fs:exists', async (_event, filePath: string) => {
   try {
-    await fs.access(filePath);
-    return { success: true, exists: true };
+    await fs.access(filePath)
+    return { success: true, exists: true }
   } catch {
-    return { success: true, exists: false };
+    return { success: true, exists: false }
   }
-});
+})
 
 ipcMain.handle('fs:readDir', async (_event, dirPath: string) => {
   try {
-    const files = await fs.readdir(dirPath);
-    return { success: true, data: files };
+    const files = await fs.readdir(dirPath)
+    return { success: true, data: files }
   } catch (error) {
-    return { success: false, error: (error as Error).message };
+    return { success: false, error: (error as Error).message }
   }
-});
+})
 
 ipcMain.handle('fs:deleteFile', async (_event, filePath: string) => {
   try {
-    await fs.unlink(filePath);
-    return { success: true };
+    await fs.unlink(filePath)
+    return { success: true }
   } catch (error) {
-    return { success: false, error: (error as Error).message };
+    return { success: false, error: (error as Error).message }
   }
-});
+})
 
 // Dialog operations
 ipcMain.handle('dialog:openFile', async (_event, options) => {
-  return await dialog.showOpenDialog(options);
-});
+  return await dialog.showOpenDialog(options)
+})
 
 ipcMain.handle('dialog:saveFile', async (_event, options) => {
-  const result = await dialog.showSaveDialog(options);
-  return await dialog.showSaveDialog(options);
-};
+  const result = await dialog.showSaveDialog(options)
+  return await dialog.showSaveDialog(options)
+})
 // App data path
 ipcMain.handle('app:getDataPath', async () => {
-  return getAppDataPath();
-});
+  return getAppDataPath()
+})
 
 ipcMain.handle('app:getPath', async (_event, name: string) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return app.getPath(name as any);
-});
+  return app.getPath(name as any)
+})
 
 // Settings operations (stored in app data directory)
 ipcMain.handle('settings:read', async () => {
   try {
-    const settingsPath = path.join(getAppDataPath(), 'settings', 'app-settings.json');
-    const content = await fs.readFile(settingsPath, 'utf-8');
-    return { success: true, data: JSON.parse(content) };
+    const settingsPath = path.join(getAppDataPath(), 'settings', 'app-settings.json')
+    const content = await fs.readFile(settingsPath, 'utf-8')
+    return { success: true, data: JSON.parse(content) }
   } catch (error) {
     // Return empty settings if file doesn't exist
-    return { success: true, data: null };
+    return { success: true, data: null }
   }
-});
+})
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ipcMain.handle('settings:write', async (_event, settings: any) => {
   try {
-    const settingsPath = path.join(getAppDataPath(), 'settings', 'app-settings.json');
-    await fs.writeFile(settingsPath, JSON.stringify(settings, null, 2), 'utf-8');
-    return { success: true };
+    const settingsPath = path.join(getAppDataPath(), 'settings', 'app-settings.json')
+    await fs.writeFile(settingsPath, JSON.stringify(settings, null, 2), 'utf-8')
+    return { success: true }
   } catch (error) {
-    return { success: false, error: (error as Error).message };
+    return { success: false, error: (error as Error).message }
   }
-});
+})
 
 // Character operations
 ipcMain.handle('character:list', async () => {
   try {
-    const charactersPath = path.join(getAppDataPath(), 'characters');
-    const files = await fs.readdir(charactersPath);
-    const characters = files.filter(f => f.endsWith('.png') || f.endsWith('.json'));
-    return { success: true, data: characters };
+    const charactersPath = path.join(getAppDataPath(), 'characters')
+    const files = await fs.readdir(charactersPath)
+    const characters = files.filter((f) => f.endsWith('.png') || f.endsWith('.json'))
+    return { success: true, data: characters }
   } catch (error) {
-    return { success: false, error: (error as Error).message };
+    return { success: false, error: (error as Error).message }
   }
-});
+})
 
 ipcMain.handle('character:read', async (_event, filename: string) => {
   try {
-    const charactersPath = path.join(getAppDataPath(), 'characters', filename);
-    const content = await fs.readFile(charactersPath);
+    const charactersPath = path.join(getAppDataPath(), 'characters', filename)
+    const content = await fs.readFile(charactersPath)
     // Return as Buffer for PNG files, string for JSON
     if (filename.endsWith('.png')) {
-      return { success: true, data: content, type: 'buffer' };
+      return { success: true, data: content, type: 'buffer' }
     } else {
-      return { success: true, data: content.toString('utf-8'), type: 'string' };
+      return { success: true, data: content.toString('utf-8'), type: 'string' }
     }
   } catch (error) {
-    return { success: false, error: (error as Error).message };
+    return { success: false, error: (error as Error).message }
   }
-});
+})
 
 ipcMain.handle('character:write', async (_event, filename: string, content: Buffer | string) => {
   try {
-    const charactersPath = path.join(getAppDataPath(), 'characters', filename);
-    await fs.writeFile(charactersPath, content);
-    return { success: true };
+    const charactersPath = path.join(getAppDataPath(), 'characters', filename)
+    await fs.writeFile(charactersPath, content)
+    return { success: true }
   } catch (error) {
-    return { success: false, error: (error as Error).message };
+    return { success: false, error: (error as Error).message }
   }
-});
+})
 
 ipcMain.handle('character:delete', async (_event, filename: string) => {
   try {
-    const charactersPath = path.join(getAppDataPath(), 'characters', filename);
-    await fs.unlink(charactersPath);
-    return { success: true };
+    const charactersPath = path.join(getAppDataPath(), 'characters', filename)
+    await fs.unlink(charactersPath)
+    return { success: true }
   } catch (error) {
-    return { success: false, error: (error as Error).message };
+    return { success: false, error: (error as Error).message }
   }
-});
+})

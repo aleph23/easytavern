@@ -989,3 +989,6 @@ pnpm-lock.yaml
 pnpm-workspace.yaml
 .mcp.json
 bun.lockb
+/.prettierrc
+/.prettierignore
+/.prettier.json
