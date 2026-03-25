@@ -1,0 +1,9 @@
+import IridescentButton from "@/components/ui/iridescent-button"
+
+export default function IridescentButtonDemo() {
+  return (
+    <div className="flex flex-col items-center justify-center">
+      <IridescentButton>Iridescent Button</IridescentButton>
+    </div>
+  )
+}
