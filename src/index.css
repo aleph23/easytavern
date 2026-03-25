@@ -28,7 +28,7 @@
     --border: #ff3cff;
     --input: #3786fb;
     --ring: #d000e1;
-
+    
     /* Glass effect variables - Enhanced with gradient tint and border glow */
     --glass-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.25) 50%, rgba(240, 248, 255, 0.3) 100%);
     --glass-border: rgba(255, 0 , 255, 0.8);
