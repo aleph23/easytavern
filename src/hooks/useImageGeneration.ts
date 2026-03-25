@@ -22,7 +22,7 @@ export const useImageGeneration = () => {
 
   const generate = useCallback(async (prompt: string) => {
     const imgSettings = settings.imageGeneration;
-    // Even if enabled is false in settings, we might want to force generate manually?
+    // Even if enabled is false in settings, we might want to force generate manually? No.
     // But for inline/auto generation, we check enabled.
     // The hook provides the capability. The caller decides policy?
     // Let's assume this function just generates.
@@ -55,9 +55,9 @@ export const useImageGeneration = () => {
             provider,
             fullPrompt,
             negative,
-            512, // Default width - could be setting
-            512, // Default height - could be setting
-            20,  // Default steps - could be setting
+            1024, // Default width - could be setting
+            1024, // Default height - could be setting
+            24,  // Default steps - could be setting
             addLog
         );
 

@@ -40,7 +40,6 @@
     --blur-lg: 32px;
   }
 
-@layer base {
   * {
     @apply border-border;
   }
@@ -150,7 +149,7 @@
 }
 
 :root {
-  --radius: 0rem;
+  --radius: 2rem;
   --primary: #970097;
   --primary-foreground: #fff4f4;
   --background: #110011;
@@ -186,7 +185,7 @@
 }
 
 .dark {
-  --radius: 0rem;
+  --radius: 2rem;
   --primary: #970097;
   --primary-foreground: #fff4f4;
   --background: #110011;
