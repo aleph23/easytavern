@@ -21,6 +21,7 @@
   },
   "registries": {
     "@aceternity": "https://ui.aceternity.com/registry/{name}.json",
-    "@glass-ui": "https://glass-ui.crenspire.com/r/{name}.json"
+    "@glass-ui": "https://glass-ui.crenspire.com/r/{name}.json",
+    "@plate": "https://platejs.org/r/{name}.json"
   }
 }
