@@ -1,11 +1,11 @@
-// Holder for all Plate components, two replace the current user text input component.
+/* Holder for all combined Plate and Prompt-Kit components, to be used to make the feature-rich (Plat Editor comps) chat interface (with Prompt-Kit comps
 
-import { HeadingPlugin } from '@platejs/basic-nodes/react';
+inport { HeadingPlugin } from '@platejs/basic-nodes/react';
 import { CodeLinePlugin } from '@platejs/code-block';
 import { CodeBlockPlugin } from '@platejs/code-block/react';
 import { PlateEditor, usePlateEditor } from 'platejs/react';
 
-// Import ALL Plate plugins needed to represent the HTML content
+// Import ALL Plate plugins needed to represent the HTML content`
 // ... and so on for bold, italic, tables, lists, etc.
 
 function MyHtmlImporter({ htmlString }: { htmlString: string }) {
@@ -26,8 +26,7 @@ function MyHtmlImporter({ htmlString }: { htmlString: string }) {
 }
 
 
-/* CodeBlock elemtns */
-const CodeBkPlugin = CodeBlockPlugin.configure({
+/* CodeBlock elemtns const CodeBkPlugin = CodeBlockPlugin.configure({
   parsers: {
     html: {
       deserializer: {
@@ -80,3 +79,4 @@ export const ListPluginConfig = {
     },
   },
 };
+*/
