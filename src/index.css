@@ -5,10 +5,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
 /* eslint-disable-next-line */
-@custom-variant dark &:is(.dark *);
+@custom-variant dark (&:is(.dark *));
 
-
-root {
+:root {
   --radius: 2rem;
   --primary: #580058;
   --primary-foreground: #ffeffe;
@@ -47,8 +46,8 @@ root {
 
 @layer base {
     /* Glass effect variables - Enhanced with gradient tint and border glow */
-    :root {
-    --glass-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.25) 50%, rgba(240, 248, 255, 0.3) 100%);
+  :root {
+    --glass-bg: linear-gradient(135deg, rgba(var(--primary) 0.4) 0%, rgba(var(--background), 0.25) 50%, rgba(var(--secondary), 0.3) 100%);
     --glass-border: var(--border);
     --glass-shadow: 0 8px 32px rgba(var(--popover), 0.12), 0 2px 8px rgba(var(--secondary), 0.08), 0 0 0 1px rgba(var(--accent), 0.1) inset,
       0 0 20px rgba(255, 255, 255, 0.05);
@@ -75,7 +74,6 @@ root {
   .font-mono {
     font-family: 'JetBrains Mono', monospace;
   }
-}
 
 @layer components {
   .glass-panel {

@@ -1,19 +1,31 @@
-'use client'
+'use client';
 
-import * as React from 'react'
-import type { VariantProps } from 'class-variance-authority'
+import * as React from 'react';
 
-import { Caption as CaptionPrimitive, CaptionTextarea as CaptionTextareaPrimitive,
-  useCaptionButton, useCaptionButtonState } from '@platejs/caption/react'
-import { createPrimitiveComponent } from '@udecode/cn'
-import { cva } from 'class-variance-authority'
+import type { VariantProps } from 'class-variance-authority';
 
-import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
+import {
+  Caption as CaptionPrimitive,
+  CaptionTextarea as CaptionTextareaPrimitive,
+  useCaptionButton,
+  useCaptionButtonState,
+} from '@platejs/caption/react';
+import { createPrimitiveComponent } from '@udecode/cn';
+import { cva } from 'class-variance-authority';
+
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 const captionVariants = cva('max-w-full', {
-  defaultVariants: { align: 'center' },
-  variants: { align: { center: 'mx-auto', left: 'mr-auto', right: 'ml-auto' },
+  defaultVariants: {
+    align: 'center',
+  },
+  variants: {
+    align: {
+      center: 'mx-auto',
+      left: 'mr-auto',
+      right: 'ml-auto',
+    },
   },
 });
 
@@ -48,5 +60,6 @@ export function CaptionTextarea(
 }
 
 export const CaptionButton = createPrimitiveComponent(Button)({
-  propsHook: useCaptionButton, stateHook: useCaptionButtonState,
+  propsHook: useCaptionButton,
+  stateHook: useCaptionButtonState,
 });
